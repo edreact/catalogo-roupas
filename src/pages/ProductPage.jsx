@@ -3,13 +3,20 @@ import ProductBadges from "../components/product/ProductBadges.jsx";
 import useCatalog from "../hooks/useCatalog.js";
 import { formatCurrency } from "../utils/formatters.js";
 import { gerarLinkWhatsApp } from "../utils/whatsapp";
+import FavoriteButton from "../components/favorites/FavoriteButton.jsx";
+import { useFavorites } from "../context/FavoritesContext.jsx";
+import { FiHeart } from "react-icons/fi";
+import { FaHeart } from "react-icons/fa";
 
 export default function ProductPage() {
   const { slug } = useParams();
   const { products, isLoading } = useCatalog();
+  const { toggleFavorite, isFavorite } = useFavorites();
   const product = products.find(
     (item) => item.slug === slug || item.code === slug,
   );
+  
+  const selected = product ? isFavorite(product.code) : false;
   const image = product?.images?.[0];
 
   if (isLoading) {
@@ -28,8 +35,12 @@ export default function ProductPage() {
   return (
     <section className="page-section product-detail-shell">
       <div
-        className={`product-gallery-placeholder ${product ? `product-art-${product.imageTone}` : ""}`}
+        className={`product-gallery-placeholder ${
+          product ? `product-art-${product.imageTone}` : ""
+        }`}
       >
+        {product && <FavoriteButton product={product} />}
+
         {image && <img src={image} alt={product.name} />}
       </div>
       <div className="product-detail-copy">
@@ -69,6 +80,20 @@ export default function ProductPage() {
             >
               Comprar pelo WhatsApp
             </a>
+          )}
+
+          {product && (
+            <button
+              type="button"
+              className={`button ${
+                selected ? "button-primary" : "button-secondary"
+              }`}
+              onClick={() => toggleFavorite(product.code)}
+            >
+              {selected ? <FaHeart /> : <FiHeart />}
+
+              {selected ? " Remover da seleção" : " Adicionar à seleção"}
+            </button>
           )}
 
           <Link className="button button-primary" to="/catalogo">
