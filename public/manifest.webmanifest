@@ -1,0 +1,21 @@
+{
+  "name": "Catalogo de Moda Feminina",
+  "short_name": "Catalogo",
+  "description": "Catalogo online de moda feminina com atendimento pelo WhatsApp.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf8f3",
+  "theme_color": "#0f0f0f",
+  "icons": [
+    {
+      "src": "/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
