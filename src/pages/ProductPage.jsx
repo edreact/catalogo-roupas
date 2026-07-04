@@ -3,10 +3,10 @@ import ProductBadges from "../components/product/ProductBadges.jsx";
 import useCatalog from "../hooks/useCatalog.js";
 import { formatCurrency } from "../utils/formatters.js";
 import { gerarLinkWhatsApp } from "../utils/whatsapp";
-import FavoriteButton from "../components/favorites/FavoriteButton.jsx";
 import { useFavorites } from "../context/FavoritesContext.jsx";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
+import ProductGallery from "../components/product/ProductGallery.jsx";
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -17,8 +17,6 @@ export default function ProductPage() {
   );
   
   const selected = product ? isFavorite(product.code) : false;
-  const image = product?.images?.[0];
-
   if (isLoading) {
     return (
       <section className="page-section product-detail-shell">
@@ -34,15 +32,9 @@ export default function ProductPage() {
 
   return (
     <section className="page-section product-detail-shell">
-      <div
-        className={`product-gallery-placeholder ${
-          product ? `product-art-${product.imageTone}` : ""
-        }`}
-      >
-        {product && <FavoriteButton product={product} />}
 
-        {image && <img src={image} alt={product.name} />}
-      </div>
+      {product && <ProductGallery product={product} />}
+
       <div className="product-detail-copy">
         <p className="eyebrow">Produto</p>
         <h1>{product?.name || "Produto nao encontrado"}</h1>
