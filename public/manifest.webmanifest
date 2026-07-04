@@ -4,6 +4,7 @@
   "description": "Escolha suas peças favoritas e fale conosco pelo WhatsApp.",
   "start_url": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#faf8f3",
   "theme_color": "#25D366",
   "icons": [

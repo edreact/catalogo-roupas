@@ -52,8 +52,9 @@ export async function fetchCatalog() {
 }
 
 function normalizeCatalog(data) {
-  const products = (data.saida || []).map(normalizeProduct);
-
+  const products = (data.saida || [])
+    .map(normalizeProduct)
+    .filter((product) => product.active);
   return {
     products,
     categories: buildGroupsFromProducts(products, "category", "categoria"),
@@ -135,7 +136,11 @@ function normalizeProduct(product, index = 0) {
       product.Imagem4,
     ].filter(Boolean),
 
-    active: product.Ativo,
+    active:
+      product.Ativo === true ||
+      product.Ativo === "TRUE" ||
+      product.Ativo === "true" ||
+      product.Ativo === 1,
 
     imageTone: imageTones[index % imageTones.length],
 
