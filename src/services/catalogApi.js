@@ -52,9 +52,9 @@ export async function fetchCatalog() {
 }
 
 function normalizeCatalog(data) {
-  const products = (data.saida || [])
-    .map(normalizeProduct)
-    .filter((product) => product.active);
+  const products = (data.produtos || data.saida || [])
+  .map(normalizeProduct)
+  .filter((product) => product.active);
   return {
     products,
     categories: buildGroupsFromProducts(products, "category", "categoria"),
@@ -129,12 +129,8 @@ function normalizeProduct(product, index = 0) {
       product.OfertaDoDia && "Oferta do dia",
     ].filter(Boolean),
 
-    images: [
-      product.Imagem1,
-      product.Imagem2,
-      product.Imagem3,
-      product.Imagem4,
-    ].filter(Boolean),
+    images: Array.from({ length: 10 }, (_, i) => product[`Imagem${i + 1}`])
+  .filter(Boolean),
 
     active:
       product.Ativo === true ||
