@@ -1354,3 +1354,31 @@ h2 {
 
   }
 }
+
+
+.product-details-dropdown {
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+}
+
+.product-details-dropdown summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 12px 0;
+  list-style: none;
+}
+
+.product-details-dropdown summary::after {
+  content: "＋";
+  float: right;
+}
+
+.product-details-dropdown[open] summary::after {
+  content: "−";
+}
+
+.product-details p {
+  margin: 8px 0;
+  line-height: 1.5;
+}

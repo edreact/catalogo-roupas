@@ -41,7 +41,9 @@ export default function ProductPage() {
         {product ? (
           <>
             <ProductBadges badges={product.badges} />
+
             <p>{product.description}</p>
+            
             <dl className="product-facts">
               <div>
                 <dt>Código</dt>
@@ -92,7 +94,35 @@ export default function ProductPage() {
             Voltar ao catálogo
           </Link>
         </div>
+        
       </div>
+
+      {product && (
+  <div className="product-detail-copy">
+    {(product.color ||
+      product.fullDescription ||
+      product.brand ||
+      product.size ||
+      product.material ||
+      product.measurements ||
+      product.occasion) && (
+      <details className="product-details-dropdown">
+        <summary>Ver detalhes do produto</summary>
+
+        <div className="product-details">
+          {product.color && <p><strong>Cor:</strong> {product.color}</p>}
+          {product.fullDescription && <p><strong>Descrição:</strong> {product.fullDescription}</p>}
+          {product.brand && <p><strong>Marca:</strong> {product.brand}</p>}
+          {product.size && <p><strong>Tamanho:</strong> {product.size}</p>}
+          {product.material && <p><strong>Material:</strong> {product.material}</p>}
+          {product.measurements && <p><strong>Medidas:</strong> {product.measurements}</p>}
+          {product.occasion && <p><strong>Ocasião:</strong> {product.occasion}</p>}
+        </div>
+      </details>
+    )}
+  </div>
+)}
+
     </section>
   );
 }

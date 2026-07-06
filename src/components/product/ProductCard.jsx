@@ -56,10 +56,6 @@ export default function ProductCard({ product }) {
             </Link>
           </h3>
 
-          <p className="product-description">
-            {product.description}
-          </p>
-
         </div>
 
         <div className="product-card-footer">
