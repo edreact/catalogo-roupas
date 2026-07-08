@@ -113,13 +113,13 @@ function normalizeProduct(product, index = 0) {
 
     featured: Boolean(product.Destaque),
 
-    new: Boolean(product.Novidade),
+    isNew: Boolean(product.Novidade),
 
-    bestSeller: Boolean(product.MaisVendido),
+    isBestSeller: Boolean(product.MaisVendido),
 
-    lastUnits: Boolean(product.UltimasPecas),
+    isLastUnits: Boolean(product.UltimasPecas),
 
-    deal: Boolean(product.OfertaDoDia),
+    isDeal: Boolean(product.OfertaDoDia),
 
     createdAt: product.DataCadastro,
 

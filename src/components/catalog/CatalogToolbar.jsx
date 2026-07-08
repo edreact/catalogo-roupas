@@ -55,7 +55,7 @@ export default function CatalogToolbar({
         </select>
       </label>
 
-      <strong>{productCount} produtos</strong>
+      {/* <p className="product-count">{productCount} produtos encontrados</p> */}
     </div>
   );
 }

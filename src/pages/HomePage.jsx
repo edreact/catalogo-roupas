@@ -15,23 +15,45 @@ export default function HomePage() {
   const promotionalProducts = products
     .filter((product) => product.isPromotion || product.isNew || product.salePrice)
     .slice(0, 3);
-  const sections = [
-    {
-      title: 'Produtos em destaque',
-      description: 'Peças selecionadas para aparecer primeiro na vitrine.',
-      products: featuredProducts.length ? featuredProducts : products.slice(0, 3),
-    },
-    {
-      title: 'Novidades e promoções',
-      description: 'Produtos marcados como novidade, promoção ou oferta do dia.',
-      products: promotionalProducts.length ? promotionalProducts : products.slice(0, 3),
-    },
-  ];
+  const sectionConfig = [
+  {
+    title: "Produtos em destaque",
+    description: "Peças selecionadas para aparecer primeiro na vitrine.",
+    match: (p) => p.featured,
+  },
+  {
+    title: "Novidades",
+    description: "Confira as novidades.",
+    match: (p) => p.isNew,
+  },
+  {
+    title: "Mais vendidos",
+    description: "Os queridinhos das clientes.",
+    match: (p) => p.isBestSeller,
+  },
+  {
+    title: "Últimas peças",
+    description: "Aproveite antes que acabem.",
+    match: (p) => p.isLastUnits,
+  },
+  {
+    title: "Oferta do dia",
+    description: "Descontos especiais por tempo limitado.",
+    match: (p) => p.isDeal,
+  },
+];
+
+const sections = sectionConfig
+  .map((section) => ({
+    ...section,
+    products: products.filter(section.match),
+  }))
+  .filter((section) => section.products.length > 0);
 
   return (
     <>
-      <Hero />
-      <BannerStrip />
+      {/* <Hero /> */}
+      {/*<BannerStrip />} */}
       <DataNotice source={source} error={error} />
 
       {sections.map((section) => (
@@ -48,7 +70,7 @@ export default function HomePage() {
 
       <SectionPreview
         title="Todos os produtos"
-        description="Produtos carregados da API publicada no banco de dados, com fallback local."
+        //description="Produtos carregados da API publicada no banco de dados, com fallback local."
       >
         {isLoading ? <LoadingGrid count={4} /> : <ProductGrid products={products} />}
         <FavoritesWhatsAppFloat />

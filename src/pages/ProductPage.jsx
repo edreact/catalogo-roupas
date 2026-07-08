@@ -105,6 +105,7 @@ export default function ProductPage() {
       product.size ||
       product.material ||
       product.measurements ||
+      product.care ||
       product.occasion) && (
       <details className="product-details-dropdown">
         <summary>Ver detalhes do produto</summary>
@@ -116,6 +117,7 @@ export default function ProductPage() {
           {product.size && <p><strong>Tamanho:</strong> {product.size}</p>}
           {product.material && <p><strong>Material:</strong> {product.material}</p>}
           {product.measurements && <p><strong>Medidas:</strong> {product.measurements}</p>}
+          {product.care && <p><strong>Cuidados:</strong> {product.care}</p>}
           {product.occasion && <p><strong>Ocasião:</strong> {product.occasion}</p>}
         </div>
       </details>

@@ -78,12 +78,12 @@ export default function CatalogPage() {
       <div className="page-heading">
         <div>
           <p className="eyebrow">Catálogo</p>
-          <h1>Todos os produtos</h1>
+          <h2>Todos os produtos</h2>
         </div>
-        <p>
+        {/*<p>
           Busca, filtros e ordenação ja estão desenhados para receber a logica
           real.
-        </p>
+        </p>*/}
       </div>
 
       <CatalogToolbar
