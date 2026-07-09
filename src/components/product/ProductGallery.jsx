@@ -1,57 +1,71 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import FavoriteButton from "../favorites/FavoriteButton.jsx";
 
 export default function ProductGallery({ product }) {
   const images = product?.images || [];
   const [current, setCurrent] = useState(0);
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
+
+  const MIN_SWIPE_DISTANCE = 50;
 
   if (!images.length) {
-    return (
-      <div className="product-gallery-placeholder">
-        Sem imagem
-      </div>
-    );
+    return <div className="product-gallery-placeholder">Sem imagem</div>;
+  }
+
+  function handleTouchStart(e) {
+    touchStartX.current = e.targetTouches[0].clientX;
+  }
+
+  function handleTouchMove(e) {
+    touchEndX.current = e.targetTouches[0].clientX;
+  }
+
+  function handleTouchEnd() {
+    if (touchStartX.current === null || touchEndX.current === null) {
+      return;
+    }
+
+    const distance = touchStartX.current - touchEndX.current;
+
+    if (distance > MIN_SWIPE_DISTANCE) {
+      nextImage();
+    } else if (distance < -MIN_SWIPE_DISTANCE) {
+      previousImage();
+    }
+
+    touchStartX.current = null;
+    touchEndX.current = null;
   }
 
   function previousImage() {
-    setCurrent((prev) =>
-      prev === 0 ? images.length - 1 : prev - 1
-    );
+    setCurrent((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   }
 
   function nextImage() {
-    setCurrent((prev) =>
-      prev === images.length - 1 ? 0 : prev + 1
-    );
+    setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   }
 
   return (
     <div className="product-gallery">
-
       <div
         className={`product-gallery-placeholder product-art-${product.imageTone}`}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         <FavoriteButton product={product} />
 
-        <img
-          src={images[current]}
-          alt={product.name}
-        />
+        <img src={images[current]} alt={product.name} />
 
         {images.length > 1 && (
           <>
-            <button
-              className="gallery-arrow left"
-              onClick={previousImage}
-            >
+            <button className="gallery-arrow left" onClick={previousImage}>
               <FiChevronLeft />
             </button>
 
-            <button
-              className="gallery-arrow right"
-              onClick={nextImage}
-            >
+            <button className="gallery-arrow right" onClick={nextImage}>
               <FiChevronRight />
             </button>
           </>
@@ -63,17 +77,10 @@ export default function ProductGallery({ product }) {
           {images.map((image, index) => (
             <button
               key={index}
-              className={
-                current === index
-                  ? "thumbnail active"
-                  : "thumbnail"
-              }
+              className={current === index ? "thumbnail active" : "thumbnail"}
               onClick={() => setCurrent(index)}
             >
-              <img
-                src={image}
-                alt={`${product.name} ${index + 1}`}
-              />
+              <img src={image} alt={`${product.name} ${index + 1}`} />
             </button>
           ))}
         </div>

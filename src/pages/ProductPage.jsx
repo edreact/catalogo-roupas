@@ -7,6 +7,7 @@ import { useFavorites } from "../context/FavoritesContext.jsx";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import ProductGallery from "../components/product/ProductGallery.jsx";
+import FavoritesWhatsAppFloat from "../components/favorites/FavoritesWhatsAppFloat.jsx";
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -93,6 +94,7 @@ export default function ProductPage() {
           <Link className="button button-primary" to="/catalogo">
             Voltar ao catálogo
           </Link>
+          <FavoritesWhatsAppFloat />
         </div>
         
       </div>

@@ -416,26 +416,33 @@ h2 {
 }
 
 .product-badges {
-  position: absolute;
-  top: 10px;
+   position: absolute;
   left: 10px;
-  right: 10px;
-  z-index: 2;
+  bottom: 10px;
+
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 6px;
+
+  z-index: 5;
 }
 
 .product-badge {
   min-height: 25px;
   display: inline-flex;
   align-items: center;
-  padding: 5px 8px;
+  padding: 4px 8px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.86);
   color: #151515;
-  font-size: 0.7rem;
+  font-size: 11px;
   font-weight: 900;
+  line-height: 1.2;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 6px rgba(0,0,0,.18);
+
 }
 
 .badge-sale,
@@ -461,9 +468,10 @@ h2 {
 
 .product-code {
   position: absolute;
+  top: 10px;
   right: 10px;
-  bottom: 10px;
   z-index: 2;
+
   padding: 6px 8px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.82);
@@ -743,10 +751,9 @@ h2 {
 .catalog-toolbar {
   margin-bottom: 24px;
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) minmax(160px, 0.32fr) minmax(
-      160px,
-      0.32fr
-    ) auto;
+  grid-template-columns:
+    minmax(220px, 1fr) minmax(160px, 0.32fr) minmax(160px, 0.32fr)
+    auto;
   align-items: end;
   gap: 12px;
 }
@@ -1027,13 +1034,14 @@ h2 {
   flex-wrap: wrap;
 }
 
+
 .favorite-button {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  bottom: 10px;
+  right: 10px;
 
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
 
   display: flex;
   align-items: center;
@@ -1052,17 +1060,17 @@ h2 {
     0 1px 2px rgba(0, 0, 0, 0.08);
 
   transition:
-    transform .25s ease,
-    box-shadow .25s ease,
-    background .25s ease,
-    color .25s ease;
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease;
 }
 
 .favorite-button svg {
   font-size: 1.25rem;
-  color:var(--accent);
+  color: var(--accent);
   stroke-width: 2.5px;
-  transition: all .25s ease;
+  transition: all 0.25s ease;
 }
 
 .favorite-button:hover {
@@ -1071,8 +1079,8 @@ h2 {
   background: white;
 
   box-shadow:
-    0 6px 18px rgba(0,0,0,.22),
-    0 2px 6px rgba(0,0,0,.12);
+    0 6px 18px rgba(0, 0, 0, 0.22),
+    0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
 .product-image-wrapper {
@@ -1087,7 +1095,7 @@ h2 {
 
 .favorite-button.selected svg {
   color: var(--accent);
-  animation: favorite-pop .25s ease;
+  animation: favorite-pop 0.25s ease;
 }
 @keyframes favorite-pop {
   0% {
@@ -1311,30 +1319,44 @@ h2 {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border: none;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.9);
   cursor: pointer;
+  color: #333;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
-  transition: 0.2s;
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s ease;
+
+  z-index: 20;
+}
+
+.product-gallery-placeholder:hover .gallery-arrow {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .gallery-arrow:hover {
-  background: white;
   transform: translateY(-50%) scale(1.08);
 }
 
 .gallery-arrow.left {
-  left: 15px;
+  left: 12px;
 }
 
 .gallery-arrow.right {
-  right: 15px;
+  right: 12px;
+}
+
+.gallery-arrow svg {
+  width: 30px;
+  height: 30px;
+  stroke-width: 2.8;
 }
 
 /* ===== Celular ===== */
@@ -1358,24 +1380,20 @@ h2 {
     min-height: 190px;
   }
 
-  .product-card .mini-action{
+  .product-card .mini-action {
+    padding: 6px 10px;
 
-    padding:6px 10px;
-
-    font-size:.8rem;
-
+    font-size: 0.8rem;
+  }
+  
+  .gallery-arrow {
+    display: none;
   }
   .favorite-button{
-
-    top:8px;
-
-    right:8px;
-
-    padding:6px;
-
+  width: 30px;
+  height: 30px;
   }
 }
-
 
 .product-details-dropdown {
   margin-top: 20px;
