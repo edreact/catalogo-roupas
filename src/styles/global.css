@@ -1097,6 +1097,7 @@ h2 {
   color: var(--accent);
   animation: favorite-pop 0.25s ease;
 }
+
 @keyframes favorite-pop {
   0% {
     transform: scale(0.5);
@@ -1393,6 +1394,16 @@ h2 {
   width: 30px;
   height: 30px;
   }
+  .product-page .favorite-button {
+  width: 54px;
+  height: 54px;
+}
+
+.product-page .favorite-button svg {
+  width: 28px;
+  height: 28px;
+}
+  
 }
 
 .product-details-dropdown {

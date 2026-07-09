@@ -33,9 +33,9 @@ export default function ProductCard({ product }) {
 
             <ProductBadges badges={product.badges} />
 
-            <span className="product-code">
+            {/* <span className="product-code">
               {product.code}
-            </span>
+            </span> */}
           </div>
         </Link>
 

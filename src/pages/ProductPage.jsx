@@ -32,7 +32,7 @@ export default function ProductPage() {
   }
 
   return (
-    <section className="page-section product-detail-shell">
+    <section className="page-section product-detail-shell product-page">
 
       {product && <ProductGallery product={product} />}
 
