@@ -41,6 +41,11 @@ export default function HomePage() {
     description: "Descontos especiais por tempo limitado.",
     match: (p) => p.isDeal,
   },
+  {
+    title: "Em promoção",
+    description: "Preços promocionais para você.",
+    match: (p) => p.isPromotion,
+  },
 ];
 
 const sections = sectionConfig
@@ -66,7 +71,7 @@ const sections = sectionConfig
         </SectionPreview>
       ))}
 
-      <CategoryShowcase categories={categories} collections={collections} />
+      {/*<CategoryShowcase categories={categories} collections={collections} />*/}
 
       <SectionPreview
         title="Todos os produtos"

@@ -123,6 +123,8 @@ function normalizeProduct(product, index = 0) {
 
     createdAt: product.DataCadastro,
 
+	isPromotion: product.Promocao,
+
     badges: [
       product.Novidade && "Novidade",
       product.Destaque && "Destaque",
