@@ -8,6 +8,7 @@ import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import ProductGallery from "../components/product/ProductGallery.jsx";
 import FavoritesWhatsAppFloat from "../components/favorites/FavoritesWhatsAppFloat.jsx";
+import ProductRelated from "../components/product/ProductRelated.jsx";
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -16,7 +17,7 @@ export default function ProductPage() {
   const product = products.find(
     (item) => item.slug === slug || item.code === slug,
   );
-  
+
   const selected = product ? isFavorite(product.code) : false;
   if (isLoading) {
     return (
@@ -33,7 +34,6 @@ export default function ProductPage() {
 
   return (
     <section className="page-section product-detail-shell product-page">
-
       {product && <ProductGallery product={product} />}
 
       <div className="product-detail-copy">
@@ -41,10 +41,10 @@ export default function ProductPage() {
         <h1>{product?.name || "Produto nao encontrado"}</h1>
         {product ? (
           <>
-            <ProductBadges badges={product.badges} />
+            <ProductBadges badges={product.badges} horizontal />
 
             <p>{product.description}</p>
-            
+
             <dl className="product-facts">
               <div>
                 <dt>Código</dt>
@@ -91,41 +91,79 @@ export default function ProductPage() {
             </button>
           )}
 
-          <Link className="button button-primary" to="/catalogo">
+          <Link className="button button-back" to="/catalogo">
             Voltar ao catálogo
           </Link>
           <FavoritesWhatsAppFloat />
         </div>
-        
       </div>
 
       {product && (
-  <div className="product-detail-copy">
-    {(product.color ||
-      product.fullDescription ||
-      product.brand ||
-      product.size ||
-      product.material ||
-      product.measurements ||
-      product.care ||
-      product.occasion) && (
-      <details className="product-details-dropdown">
-        <summary>Ver detalhes do produto</summary>
+        <div className="product-detail-copy">
+          {(product.color ||
+            product.fullDescription ||
+            product.brand ||
+            product.size ||
+            product.material ||
+            product.measurements ||
+            product.care ||
+            product.occasion) && (
+            <details className="product-details-dropdown">
+              <summary>Ver detalhes do produto</summary>
 
-        <div className="product-details">
-          {product.color && <p><strong>Cor:</strong> {product.color}</p>}
-          {product.fullDescription && <p><strong>Descrição:</strong> {product.fullDescription}</p>}
-          {product.brand && <p><strong>Marca:</strong> {product.brand}</p>}
-          {product.size && <p><strong>Tamanho:</strong> {product.size}</p>}
-          {product.material && <p><strong>Material:</strong> {product.material}</p>}
-          {product.measurements && <p><strong>Medidas:</strong> {product.measurements}</p>}
-          {product.care && <p><strong>Cuidados:</strong> {product.care}</p>}
-          {product.occasion && <p><strong>Ocasião:</strong> {product.occasion}</p>}
+              <div className="product-details">
+                {product.color && (
+                  <p>
+                    <strong>Cor:</strong> {product.color}
+                  </p>
+                )}
+                {product.fullDescription && (
+                  <p>
+                    <strong>Descrição:</strong> {product.fullDescription}
+                  </p>
+                )}
+                {product.brand && (
+                  <p>
+                    <strong>Marca:</strong> {product.brand}
+                  </p>
+                )}
+                {product.size && (
+                  <p>
+                    <strong>Tamanho:</strong> {product.size}
+                  </p>
+                )}
+                {product.material && (
+                  <p>
+                    <strong>Material:</strong> {product.material}
+                  </p>
+                )}
+                {product.measurements && (
+                  <p>
+                    <strong>Medidas:</strong> {product.measurements}
+                  </p>
+                )}
+                {product.care && (
+                  <p>
+                    <strong>Cuidados:</strong> {product.care}
+                  </p>
+                )}
+                {product.occasion && (
+                  <p>
+                    <strong>Ocasião:</strong> {product.occasion}
+                  </p>
+                )}
+              </div>
+              
+            </details>
+          )}
+          
         </div>
-      </details>
-    )}
-  </div>
-)}
+      )}
+
+      <ProductRelated
+  product={product}
+  products={products}
+/>
 
     </section>
   );

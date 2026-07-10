@@ -428,6 +428,25 @@ h2 {
   z-index: 5;
 }
 
+/* Apenas na ProductPage */
+.product-badges-horizontal {
+  position: static;
+
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin: 0.75rem 0 1rem;
+}
+
+.product-badges-horizontal .product-badge {
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
 .product-badge {
   min-height: 25px;
   display: inline-flex;
@@ -1431,4 +1450,52 @@ h2 {
 .product-details p {
   margin: 8px 0;
   line-height: 1.5;
+}
+
+/*PRODUTOS RELACIONADOS*/
+
+.related-products {
+  margin-top: 4rem;
+}
+
+.related-products h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/*VOLTAR AO CATÁLOGO*/
+
+.button-back {
+  background: #161616;
+  color: #fff;
+}
+
+.button-back:hover {
+  opacity: 0.9;
+}
+
+/*arrumar posições dos cards na tela de produtos para que eles apareçam embaixo e não do lado.*/
+
+.related-products {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 4rem;
+}
+
+.related-products {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 4rem;
+}
+
+.related-products h2 {
+  margin-bottom: 1.5rem;
+}
+
+
+.related-products-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
 }
