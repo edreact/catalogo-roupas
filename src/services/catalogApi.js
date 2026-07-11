@@ -73,7 +73,7 @@ function normalizeProduct(product, index = 0) {
 
     name: product.Nome || "Produto",
 
-    slug: product.Slug || createSlug(`${product.Nome}-${product.Codigo}`),
+    slug: createSlug(`${product.Nome}-${product.Codigo}`),
 
     category: product.Categoria || "",
 
@@ -102,6 +102,8 @@ function normalizeProduct(product, index = 0) {
     material: product.Material || "",
 
     occasion: product.Ocasiao || "",
+
+    related: product.Relacionados || "",
 
     measurements: product.Medidas || "",
 

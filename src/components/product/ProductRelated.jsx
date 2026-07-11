@@ -3,6 +3,14 @@ import ProductGrid from "./ProductGrid.jsx";
 export default function ProductRelated({ product, products }) {
   if (!product) return null;
 
+  // Códigos informados manualmente na planilha
+  const manualRelatedCodes = product.related
+    ? product.related
+        .split(",")
+        .map((code) => code.trim())
+        .filter(Boolean)
+    : [];
+
   const scoreProduct = (p) => {
     let points = 0;
 
@@ -47,15 +55,33 @@ export default function ProductRelated({ product, products }) {
     return points;
   };
 
-  const relatedProducts = products
-    .filter((item) => item.code !== product.code)
+  // Produtos escolhidos manualmente
+  const manualProducts = manualRelatedCodes
+    .map((code) =>
+      products.find(
+        (item) =>
+          String(item.code) === code &&
+          item.code !== product.code
+      )
+    )
+    .filter(Boolean);
+
+  // Produtos encontrados automaticamente
+  const autoProducts = products
+    .filter(
+      (item) =>
+        item.code !== product.code &&
+        !manualRelatedCodes.includes(String(item.code))
+    )
     .map((item) => ({
       ...item,
       score: scoreProduct(item),
     }))
     .sort((a, b) => b.score - a.score)
-    .slice(0, 6)
     .map(({ score, ...item }) => item);
+
+  // Junta os dois e limita a 6
+  const relatedProducts = [...manualProducts, ...autoProducts].slice(0, 6);
 
   if (!relatedProducts.length) return null;
 
