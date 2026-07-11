@@ -77,7 +77,7 @@ function normalizeProduct(product, index = 0) {
 
     category: product.Categoria || "",
 
-    SubCategory: product.SubCategoria || "",
+    subCategory: product.subCategoria || "",
 
     collection: product.Colecao || "",
 

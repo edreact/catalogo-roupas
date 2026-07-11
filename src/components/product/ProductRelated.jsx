@@ -8,8 +8,8 @@ export default function ProductRelated({ product, products }) {
 
     // Mesma subcategoria
     if (
-      product.SubCategory &&
-      p.SubCategory === product.SubCategory
+      product.subCategory &&
+      p.subCategory === product.subCategory
     ) {
       points += 4;
     }
