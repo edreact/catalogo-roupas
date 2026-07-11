@@ -9,10 +9,7 @@ export default function ProductRelated({ product, products }) {
       const score = (p) => {
         let points = 0;
 
-        if (
-          product.SubCategory &&
-          p.SubCategory === product.SubCategory
-        ) {
+        if (product.SubCategory && p.SubCategory === product.SubCategory) {
           points += 4;
         }
 
@@ -20,10 +17,7 @@ export default function ProductRelated({ product, products }) {
           points += 3;
         }
 
-        if (
-          product.collection &&
-          p.collection === product.collection
-        ) {
+        if (product.collection && p.collection === product.collection) {
           points += 2;
         }
 
@@ -44,7 +38,9 @@ export default function ProductRelated({ product, products }) {
     <section className="related-products">
       <h2>Você também pode gostar</h2>
 
-      <ProductGrid products={relatedProducts} />
+      <div className="product-related">
+        <ProductGrid products={relatedProducts} />
+      </div>
     </section>
   );
 }
