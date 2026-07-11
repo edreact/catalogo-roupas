@@ -1,78 +1,50 @@
 import ProductGrid from "./ProductGrid.jsx";
-import { relatedProductsMap } from "../../data/relatedProducts.js";
 
 export default function ProductRelated({ product, products }) {
-
   if (!product) return null;
 
-
-  let related = [];
-
-
-  // Primeiro tenta manual
-  const manualCodes = relatedProductsMap[product.code];
-
-
-  if (manualCodes) {
-    related = products.filter((item) =>
-      manualCodes.includes(item.code)
-    );
-  }
-
-
-  // Caso não exista manual, usa algoritmo
-  if (!related.length) {
-
-    related = products
-      .filter(item => item.code !== product.code)
-      .map(item => {
-
-        let score = 0;
-
+  const relatedProducts = products
+    .filter((item) => item.code !== product.code)
+    .sort((a, b) => {
+      const score = (p) => {
+        let points = 0;
 
         if (
           product.SubCategory &&
-          item.SubCategory === product.SubCategory
+          p.SubCategory === product.SubCategory
         ) {
-          score += 4;
+          points += 4;
         }
 
-
-        if (
-          item.category === product.category
-        ) {
-          score += 3;
+        if (p.category === product.category) {
+          points += 3;
         }
-
 
         if (
           product.collection &&
-          item.collection === product.collection
+          p.collection === product.collection
         ) {
-          score += 2;
+          points += 2;
         }
 
+        if (p.featured) {
+          points += 1;
+        }
 
-        return {
-          ...item,
-          score
-        };
+        return points;
+      };
 
-      })
-      .filter(item => item.score > 0)
-      .sort((a,b)=>b.score-a.score);
+      return score(b) - score(a);
+    })
+    .slice(0, 4);
 
-  }
-
-
-  if (!related.length) return null;
-
+  if (!relatedProducts.length) return null;
 
   return (
     <section className="related-products">
-      <h2>Produtos relacionados</h2>
+      <h2>Você também pode gostar</h2>
 
-      <ProductGrid products={related}/>
+      <ProductGrid products={relatedProducts} />
     </section>
   );
 }
