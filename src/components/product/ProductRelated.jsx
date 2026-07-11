@@ -54,7 +54,7 @@ export default function ProductRelated({ product, products }) {
       score: scoreProduct(item),
     }))
     .sort((a, b) => b.score - a.score)
-    .slice(0, 4);
+    .slice(0, 6);
 
   if (!relatedProducts.length) return null;
 
