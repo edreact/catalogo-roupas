@@ -42,7 +42,7 @@ export default function ProductRelated({ product, products }) {
 
   return (
     <section className="related-products">
-      <h2>Você também pode gostar</h2>
+      <h2>Produtos relacionados</h2>
 
       <ProductGrid products={relatedProducts} />
     </section>
