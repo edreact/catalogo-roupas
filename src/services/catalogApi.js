@@ -107,9 +107,12 @@ function normalizeProduct(product, index = 0) {
 
     care: product.Cuidados || "",
 
-    tags: product.TagsPesquisa
-      ? product.TagsPesquisa.split(",").map((tag) => tag.trim())
-      : [],
+tags: product.TagsPesquisa
+  ? product.TagsPesquisa
+      .split(",")
+      .map((tag) => tag.trim().toLowerCase())
+  : [],
+
 
     featured: Boolean(product.Destaque),
 
