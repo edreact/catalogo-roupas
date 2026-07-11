@@ -1,50 +1,78 @@
 import ProductGrid from "./ProductGrid.jsx";
+import { relatedProductsMap } from "../../data/relatedProducts.js";
 
 export default function ProductRelated({ product, products }) {
+
   if (!product) return null;
 
-  const relatedProducts = products
-    .filter((item) => item.code !== product.code)
-    .sort((a, b) => {
-      const score = (p) => {
-        let points = 0;
+
+  let related = [];
+
+
+  // Primeiro tenta manual
+  const manualCodes = relatedProductsMap[product.code];
+
+
+  if (manualCodes) {
+    related = products.filter((item) =>
+      manualCodes.includes(item.code)
+    );
+  }
+
+
+  // Caso não exista manual, usa algoritmo
+  if (!related.length) {
+
+    related = products
+      .filter(item => item.code !== product.code)
+      .map(item => {
+
+        let score = 0;
+
 
         if (
           product.SubCategory &&
-          p.SubCategory === product.SubCategory
+          item.SubCategory === product.SubCategory
         ) {
-          points += 4;
+          score += 4;
         }
 
-        if (p.category === product.category) {
-          points += 3;
+
+        if (
+          item.category === product.category
+        ) {
+          score += 3;
         }
+
 
         if (
           product.collection &&
-          p.collection === product.collection
+          item.collection === product.collection
         ) {
-          points += 2;
+          score += 2;
         }
 
-        if (p.featured) {
-          points += 1;
-        }
 
-        return points;
-      };
+        return {
+          ...item,
+          score
+        };
 
-      return score(b) - score(a);
-    })
-    .slice(0, 4);
+      })
+      .filter(item => item.score > 0)
+      .sort((a,b)=>b.score-a.score);
 
-  if (!relatedProducts.length) return null;
+  }
+
+
+  if (!related.length) return null;
+
 
   return (
     <section className="related-products">
       <h2>Produtos relacionados</h2>
 
-      <ProductGrid products={relatedProducts} />
+      <ProductGrid products={related}/>
     </section>
   );
 }

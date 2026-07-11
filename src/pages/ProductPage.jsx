@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import { useEffect } from "react";
 import ProductBadges from "../components/product/ProductBadges.jsx";
 import useCatalog from "../hooks/useCatalog.js";
 import { formatCurrency } from "../utils/formatters.js";
@@ -17,6 +18,13 @@ export default function ProductPage() {
   const product = products.find(
     (item) => item.slug === slug || item.code === slug,
   );
+
+  useEffect(() => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+}, [slug]);
 
   const selected = product ? isFavorite(product.code) : false;
   if (isLoading) {

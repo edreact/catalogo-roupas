@@ -17,6 +17,11 @@ export default function HomePage() {
     .slice(0, 3);
   const sectionConfig = [
   {
+    title: "Oferta do dia",
+    description: "Descontos especiais por tempo limitado.",
+    match: (p) => p.isDeal,
+  },
+  {
     title: "Produtos em destaque",
     description: "Peças selecionadas para aparecer primeiro na vitrine.",
     match: (p) => p.featured,
@@ -35,11 +40,6 @@ export default function HomePage() {
     title: "Últimas peças",
     description: "Aproveite antes que acabem.",
     match: (p) => p.isLastUnits,
-  },
-  {
-    title: "Oferta do dia",
-    description: "Descontos especiais por tempo limitado.",
-    match: (p) => p.isDeal,
   },
   {
     title: "Em promoção",
