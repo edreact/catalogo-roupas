@@ -1088,7 +1088,7 @@ h2 {
 
 .favorite-button svg {
   font-size: 1.25rem;
-  color: var(--accent);
+  color: #9b2335;
   stroke-width: 2.5px;
   transition: all 0.25s ease;
 }
@@ -1114,7 +1114,7 @@ h2 {
 }
 
 .favorite-button.selected svg {
-  color: var(--accent);
+  color: #9b2335;
   animation: favorite-pop 0.25s ease;
 }
 
