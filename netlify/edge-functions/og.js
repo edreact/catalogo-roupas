@@ -1,5 +1,4 @@
 export default async (request, context) => {
-
   const url = new URL(request.url);
 
   // Executa somente nas páginas de produto
@@ -9,8 +8,7 @@ export default async (request, context) => {
     return context.next();
   }
 
-  const userAgent =
-    request.headers.get("user-agent") || "";
+  const userAgent = request.headers.get("user-agent") || "";
 
   // Bots que geram preview
   const BOT_REGEX =
@@ -25,38 +23,25 @@ export default async (request, context) => {
 
   const id = decodeURIComponent(match[1]);
 
-  const api =
-    Deno.env.get("CATALOG_API_URL");
+  const api = Deno.env.get("CATALOG_API_URL");
 
   if (!api) {
-
-    console.error(
-      "CATALOG_API_URL não configurada."
-    );
+    console.error("CATALOG_API_URL não configurada.");
 
     return context.next();
-
   }
 
   try {
-
-    const response = await fetch(
-      `${api}?codigo=${encodeURIComponent(id)}`,
-      {
-        headers: {
-          Accept: "application/json"
-        }
-      }
-    );
+    const response = await fetch(`${api}?codigo=${encodeURIComponent(id)}`, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
     if (!response.ok) {
-
-      console.error(
-        "Erro ao consultar a API."
-      );
+      console.error("Erro ao consultar a API.");
 
       return context.next();
-
     }
 
     const data = await response.json();
@@ -67,21 +52,17 @@ export default async (request, context) => {
       return context.next();
     }
 
-    const title =
-      escapeHtml(product.Nome || "");
+    const title = escapeHtml(product.Nome || "");
 
-    const description =
-      escapeHtml(
-        product.DescricaoCurta ||
-        product.DescricaoCompleta ||
-        ""
-      );
+    const description = escapeHtml(
+      product.DescricaoCurta || product.DescricaoCompleta || "",
+    );
 
-    const image =
-      product.Imagem1 || "";
+    const img = Number(url.searchParams.get("img")) || 1;
 
-    const pageUrl =
-      url.href;
+    const image = product[`Imagem${img}`] || product.Imagem1 || "";
+
+    const pageUrl = url.href;
 
     const html = `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -139,41 +120,24 @@ content="${image}">
 
 </html>`;
 
-    return new Response(
-      html,
-      {
+    return new Response(html, {
+      status: 200,
 
-        status: 200,
+      headers: {
+        "Content-Type": "text/html; charset=UTF-8",
 
-        headers: {
-
-          "Content-Type":
-            "text/html; charset=UTF-8",
-
-          "Cache-Control":
-            "public, max-age=600, s-maxage=3600"
-
-        }
-
-      }
-    );
-
-  }
-
-  catch (err) {
-
+        "Cache-Control": "public, max-age=600, s-maxage=3600",
+      },
+    });
+  } catch (err) {
     console.error(err);
 
     return context.next();
-
   }
-
 };
 
 function escapeHtml(text = "") {
-
   return String(text)
-
     .replace(/&/g, "&amp;")
 
     .replace(/</g, "&lt;")
@@ -183,5 +147,4 @@ function escapeHtml(text = "") {
     .replace(/"/g, "&quot;")
 
     .replace(/'/g, "&#39;");
-
 }

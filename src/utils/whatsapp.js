@@ -35,11 +35,15 @@ Pode me informar disponibilidade?`;
 
 // COMPARTILHAR PRODUTO
 
-export function compartilharProdutoWhatsApp(product) {
-  const url = window.location.href;
+export function compartilharProdutoWhatsApp(product, currentImage = 0) {
+  const url = new URL(window.location.href);
+
+  url.searchParams.set("img", currentImage + 1);
+
+  const shareUrl = url.toString();
 
   const mensagem = `Olha o que eu encontrei!
-${product.name} no Catálogo Feminino. Entra aqui: ${url}`;
+${product.name} no Catálogo Feminino. Entra aqui: ${shareUrl}`;
 
   const link = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
 

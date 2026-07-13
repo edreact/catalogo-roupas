@@ -6,7 +6,13 @@ import { FiShare2 } from "react-icons/fi";
 
 export default function ProductGallery({ product }) {
   const images = product?.images || [];
-  const [current, setCurrent] = useState(0);
+  const initialImage = (() => {
+    const img = Number(new URLSearchParams(window.location.search).get("img"));
+
+    return img > 0 ? img - 1 : 0;
+  })();
+
+  const [current, setCurrent] = useState(initialImage);
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
 
@@ -61,7 +67,7 @@ export default function ProductGallery({ product }) {
 
         <button
           className="share-button"
-          onClick={() => compartilharProdutoWhatsApp(product)}
+          onClick={() => compartilharProdutoWhatsApp(product, current)}
           aria-label="Compartilhar produto"
         >
           <FiShare2 size={20} className="share-icon" />
