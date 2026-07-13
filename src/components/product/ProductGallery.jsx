@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import FavoriteButton from "../favorites/FavoriteButton.jsx";
+import { compartilharProdutoWhatsApp } from "../../utils/whatsapp";
 
 export default function ProductGallery({ product }) {
   const images = product?.images || [];
@@ -40,11 +41,15 @@ export default function ProductGallery({ product }) {
   }
 
   function previousImage() {
-    setCurrent((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setCurrent((prev) =>
+      prev === 0 ? images.length - 1 : prev - 1
+    );
   }
 
   function nextImage() {
-    setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setCurrent((prev) =>
+      prev === images.length - 1 ? 0 : prev + 1
+    );
   }
 
   return (
@@ -56,6 +61,60 @@ export default function ProductGallery({ product }) {
         onTouchEnd={handleTouchEnd}
       >
         <FavoriteButton product={product} />
+
+        <button
+          type="button"
+          className="share-button"
+          onClick={() => compartilharProdutoWhatsApp(product)}
+          aria-label="Compartilhar produto"
+          title="Compartilhar produto"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="18"
+              cy="5"
+              r="2.5"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+
+            <circle
+              cx="6"
+              cy="12"
+              r="2.5"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+
+            <circle
+              cx="18"
+              cy="19"
+              r="2.5"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+
+            <path
+              d="M8.3 11L15.7 6.2"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+
+            <path
+              d="M8.3 13L15.7 17.8"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
 
         <img src={images[current]} alt={product.name} />
 

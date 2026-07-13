@@ -3,13 +3,15 @@ import { useEffect } from "react";
 import ProductBadges from "../components/product/ProductBadges.jsx";
 import useCatalog from "../hooks/useCatalog.js";
 import { formatCurrency } from "../utils/formatters.js";
-import { gerarLinkWhatsApp } from "../utils/whatsapp";
 import { useFavorites } from "../context/FavoritesContext.jsx";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import ProductGallery from "../components/product/ProductGallery.jsx";
 import FavoritesWhatsAppFloat from "../components/favorites/FavoritesWhatsAppFloat.jsx";
 import ProductRelated from "../components/product/ProductRelated.jsx";
+import {
+  gerarLinkWhatsApp
+} from "../utils/whatsapp";
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -20,11 +22,11 @@ export default function ProductPage() {
   );
 
   useEffect(() => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
-}, [slug]);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [slug]);
 
   const selected = product ? isFavorite(product.code) : false;
   if (isLoading) {
@@ -161,18 +163,12 @@ export default function ProductPage() {
                   </p>
                 )}
               </div>
-              
             </details>
           )}
-          
         </div>
       )}
 
-      <ProductRelated
-  product={product}
-  products={products}
-/>
-
+      <ProductRelated product={product} products={products} />
     </section>
   );
 }
