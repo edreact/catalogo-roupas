@@ -73,7 +73,7 @@ function normalizeProduct(product, index = 0) {
 
     name: product.Nome || "Produto",
 
-    slug: createSlug(`${product.Nome}-${product.Codigo}`),
+    slug: String(product.Codigo),
 
     category: product.Categoria || "",
 

@@ -1511,6 +1511,10 @@ h2 {
     height: 18px;
 }
 
+.share-icon{
+    color:#9b2335;
+}
+
 .share-button {
   position: absolute;
   top: 12px;
@@ -1522,7 +1526,7 @@ h2 {
   border: none;
   border-radius: 50%;
 
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255,255,255,.96);
 
   display: flex;
   align-items: center;
@@ -1530,35 +1534,34 @@ h2 {
 
   cursor: pointer;
 
-  color: var(--accent);
-
-  box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
+  box-shadow: 0 4px 14px rgba(0,0,0,.18);
 
   transition:
     transform .18s ease,
     box-shadow .18s ease,
-    color .18s ease,
     background .18s ease;
 
   z-index: 15;
 }
 
-.share-button:hover {
+.share-button:hover{
   transform: scale(1.08);
 
-  background: white;
+  background:#fff;
 
-  color: var(--color-primary);
-
-  box-shadow: 0 8px 22px rgba(0,0,0,.25);
+  box-shadow:0 8px 22px rgba(0,0,0,.25);
 }
 
-.share-button:active {
-  transform: scale(.95);
+.share-button:active{
+  transform:scale(.95);
 }
 
-.share-button svg {
-  width: 25px;
-  height: 25px;
-  stroke-width: 2.5px;
+.share-button svg{
+  width:25px;
+  height:25px;
+  transition:transform .2s ease;
+}
+
+.share-button:hover svg{
+    transform:rotate(8deg);
 }
