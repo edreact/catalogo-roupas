@@ -14,7 +14,7 @@ export default function Footer() {
         </p>
 
         <div className="footer-dev">
-          <span>Desenvolvido por </span>
+          <span>By </span>
 
           <a
             href="mailto:edson.ocampo@gmail.com"
