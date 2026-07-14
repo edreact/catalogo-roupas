@@ -76,7 +76,8 @@ export default function ProductPage() {
           </p>
         )}
         <div className="product-actions">
-          {product && (
+
+        {product && (
             <a
               className="button button-whatsapp"
               href={gerarLinkWhatsApp(product)}
@@ -86,7 +87,7 @@ export default function ProductPage() {
               Comprar pelo WhatsApp
             </a>
           )}
-
+          {/*
           {product && (
             <button
               type="button"
@@ -99,7 +100,7 @@ export default function ProductPage() {
 
               {selected ? " Remover da seleção" : " Adicionar à seleção"}
             </button>
-          )}
+          )}*/}
 
           <Link className="button button-back" to="/catalogo">
             Voltar ao catálogo
