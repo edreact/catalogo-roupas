@@ -17,7 +17,7 @@ export default function Footer() {
           <span>By </span>
 
           <a
-            href="mailto:edson.ocampo@gmail.com"
+            href="mailto:edreactwebdesign@gmail.com"
             className="footer-logo-link"
             aria-label="Entrar em contato com Edreact"
             title="Entrar em contato com Edreact"
