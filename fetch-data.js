@@ -1,66 +1,57 @@
+import axios from "axios";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outputPath = path.join(__dirname, "src", "data", "produtos.json");
+
 const imageTones = ["rose", "sand", "wine", "denim", "ivory", "black"];
 
-await generateStaticCatalog();
+await loadLocalEnv();
 
-async function generateStaticCatalog() {
-  await loadLocalEnv();
+const sourceUrl =
+  process.env.CATALOG_CSV_URL ||
+  process.env.GOOGLE_SHEETS_CSV_URL ||
+  process.env.VITE_CATALOG_CSV_URL ||
+  process.env.CATALOG_API_URL ||
+  process.env.VITE_CATALOG_API_URL ||
+  "";
 
-  const sourceUrl =
-    process.env.SUA_VARIAVEL ||
-    process.env.CATALOG_CSV_URL ||
-    process.env.GOOGLE_SHEETS_CSV_URL ||
-    process.env.VITE_CATALOG_CSV_URL ||
-    process.env.CATALOG_API_URL ||
-    process.env.VITE_CATALOG_API_URL ||
-    "";
-
-  if (!sourceUrl) {
-    throw new Error(
-      "Configure SUA_VARIAVEL, CATALOG_CSV_URL, GOOGLE_SHEETS_CSV_URL, VITE_CATALOG_CSV_URL, CATALOG_API_URL ou VITE_CATALOG_API_URL no ambiente do build.",
-    );
-  }
-
-  const response = await fetch(sourceUrl, {
-    headers: {
-      Accept: "text/csv, application/json;q=0.9, */*;q=0.8",
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      `Falha ao baixar catalogo estatico: ${response.status} ${response.statusText}`,
-    );
-  }
-
-  const rows = parsePayload(await response.text());
-  const products = rows.map(normalizeProduct).filter((product) => product.active);
-
-  const catalog = {
-    products,
-    productsRaw: products.map((product) => product.raw),
-    categories: buildGroupsFromProducts(products, "category", "categoria"),
-    collections: buildGroupsFromProducts(products, "collection", "colecao"),
-    config: {},
-    banners: [],
-    updatedAt: new Date().toISOString(),
-    source: "static",
-    error: "",
-  };
-
-  await mkdir(path.dirname(outputPath), { recursive: true });
-  await writeFile(outputPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
-
-  console.log(`Catalogo estatico gerado em ${path.relative(__dirname, outputPath)}.`);
-  console.log(`${products.length} produtos ativos gravados.`);
+if (!sourceUrl) {
+  throw new Error(
+    "Configure CATALOG_CSV_URL, GOOGLE_SHEETS_CSV_URL, VITE_CATALOG_CSV_URL, CATALOG_API_URL ou VITE_CATALOG_API_URL no ambiente do build.",
+  );
 }
+
+const response = await axios.get(sourceUrl, {
+  responseType: "text",
+  transformResponse: [(data) => data],
+  headers: {
+    Accept: "text/csv, application/json;q=0.9, */*;q=0.8",
+  },
+});
+
+const rows = parsePayload(response.data);
+const products = rows.map(normalizeProduct).filter((product) => product.active);
+
+const catalog = {
+  products,
+  productsRaw: products.map((product) => product.raw),
+  categories: buildGroupsFromProducts(products, "category", "categoria"),
+  collections: buildGroupsFromProducts(products, "collection", "colecao"),
+  config: {},
+  banners: [],
+  updatedAt: new Date().toISOString(),
+  source: "static",
+  error: "",
+};
+
+await mkdir(path.dirname(outputPath), { recursive: true });
+await writeFile(outputPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
+
+console.log(`Catalogo estatico gerado em ${path.relative(__dirname, outputPath)}.`);
+console.log(`${products.length} produtos ativos gravados.`);
 
 async function loadLocalEnv() {
   try {
@@ -78,7 +69,7 @@ async function loadLocalEnv() {
         }
       });
   } catch {
-    // Netlify fornece as variaveis de ambiente diretamente durante o build.
+    // Netlify provides environment variables directly during build.
   }
 }
 
@@ -309,11 +300,3 @@ function createSlug(value) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
-
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    host: '127.0.0.1',
-    port: 5173,
-  },
-});

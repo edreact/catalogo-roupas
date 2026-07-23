@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import useCatalog from "../hooks/useCatalog.js";
+import listaProdutos from "../data/produtos.json";
 import { useFavorites } from "../context/FavoritesContext.jsx";
 import ProductCard from "../components/product/ProductCard.jsx";
 import { gerarLinkWhatsAppFavoritos } from "../utils/whatsapp.js";
@@ -7,7 +7,7 @@ import { FaWhatsapp } from "react-icons/fa";
 
 export default function FavoritesPage() {
   const { favorites } = useFavorites(); // ["VF-1001"]
-  const { products } = useCatalog(); // [{code: "VF-1001", ...}]
+  const products = listaProdutos.products || []; // [{code: "VF-1001", ...}]
 
   // CORREÇÃO AQUI: Mudamos de product.id para product.code
   const favoriteProducts =

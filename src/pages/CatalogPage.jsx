@@ -1,12 +1,15 @@
 import CatalogToolbar from "../components/catalog/CatalogToolbar.jsx";
-import ProductCardSkeleton from "../components/product/ProductCardSkeleton.jsx";
 import ProductGrid from "../components/product/ProductGrid.jsx";
 import { useMemo, useState } from "react";
-import useCatalog from "../hooks/useCatalog.js";
+import listaProdutos from "../data/produtos.json";
 import FavoritesWhatsAppFloat from "../components/favorites/FavoritesWhatsAppFloat.jsx";
 
+const staticProducts = listaProdutos.products || [];
+const staticCategories = listaProdutos.categories || [];
+
 export default function CatalogPage() {
-  const { products, categories, isLoading, source, error } = useCatalog();
+  const products = staticProducts;
+  const categories = staticCategories;
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
@@ -97,41 +100,9 @@ export default function CatalogPage() {
         onSortChange={setSort}
       />
 
-      <CatalogNotice source={source} error={error} />
-
-      {isLoading ? (
-        <CatalogLoadingGrid />
-      ) : (
-        <ProductGrid products={filteredProducts} />
-      )}
+      <ProductGrid products={filteredProducts} />
 
       <FavoritesWhatsAppFloat />
     </section>
-  );
-}
-
-
-function CatalogLoadingGrid() {
-  return (
-    <div className="product-grid">
-      {Array.from({ length: 6 }).map((_, index) => (
-        <ProductCardSkeleton key={index} />
-      ))}
-    </div>
-  );
-}
-
-function CatalogNotice({ source, error }) {
-  if (source === "api" || source === "loading") return null;
-
-  return (
-    <div className="data-notice data-notice-catalog">
-      <strong>
-        {source === "cache"
-          ? "Dados carregados do cache"
-          : "API nao configurada"}
-      </strong>
-      {error && <span>{error}</span>}
-    </div>
   );
 }
