@@ -16,6 +16,12 @@ export default function CatalogPage() {
   const [sort, setSort] = useState("featured");
 
   const filteredProducts = useMemo(() => {
+    const parseProductDate = (product) => {
+      const isoDate = product.createdAt || product.raw?.DataCadastro;
+      const timestamp = Date.parse(isoDate);
+      return Number.isNaN(timestamp) ? 0 : timestamp;
+    };
+
     let result = [...products];
 
     // BUSCA
@@ -63,7 +69,9 @@ export default function CatalogPage() {
         break;
 
       case "recent":
-        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        result.sort(
+          (a, b) => parseProductDate(b) - parseProductDate(a),
+        );
 
         break;
 

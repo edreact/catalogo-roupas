@@ -6,14 +6,23 @@ import ProductGrid from '../components/product/ProductGrid.jsx';
 import listaProdutos from "../data/produtos.json";
 import FavoritesWhatsAppFloat from '../components/favorites/FavoritesWhatsAppFloat.jsx';
 
+const parseProductDate = (product) => {
+  const isoDate = product.createdAt || product.raw?.DataCadastro;
+  const timestamp = Date.parse(isoDate);
+  return Number.isNaN(timestamp) ? 0 : timestamp;
+};
+
+const sortByRecent = (items) =>
+  [...items].sort((a, b) => parseProductDate(b) - parseProductDate(a));
+
 export default function HomePage() {
   const products = listaProdutos.products || [];
-  const featuredProducts = products
-    .filter((product) => product.isFeatured || product.tags?.includes('destaque'))
-    .slice(0, 3);
-  const promotionalProducts = products
-    .filter((product) => product.isPromotion || product.isNew || product.salePrice)
-    .slice(0, 3);
+  const featuredProducts = sortByRecent(
+    products.filter((product) => product.isFeatured || product.tags?.includes('destaque')),
+  ).slice(0, 3);
+  const promotionalProducts = sortByRecent(
+    products.filter((product) => product.isPromotion || product.isNew || product.salePrice),
+  ).slice(0, 3);
   const sectionConfig = [
   {
     title: "Oferta do dia",
@@ -50,7 +59,7 @@ export default function HomePage() {
 const sections = sectionConfig
   .map((section) => ({
     ...section,
-    products: products.filter(section.match),
+    products: sortByRecent(products.filter(section.match)),
   }))
   .filter((section) => section.products.length > 0);
 
