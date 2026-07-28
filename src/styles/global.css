@@ -342,6 +342,39 @@ main {
 
 /* Home */
 
+/* ESTILO GERAL DAS SETAS (DESKTOP E MOBILE) */
+.hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.4);
+  color: #f3d58f; /* Cor dourada combinando com o site */
+  border: none;
+  font-size: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.3s ease;
+}
+
+.hero-arrow:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.hero-arrow-left {
+  left: 10px;
+}
+
+.hero-arrow-right {
+  right: 10px;
+}
+
+
 .hero-featured-info span,
 .hero-featured-info strong,
 .hero-featured-info p,
@@ -1689,13 +1722,13 @@ main {
 
   .hero-media {
     width: 100%;
-    aspect-ratio: 1 / 1; /* Garante que o slide continue perfeitamente quadrado no celular */
+    aspect-ratio: 1 / 1;
   }
 
   .hero-featured-info {
     left: 14px;
-    bottom: 46px; /* Subimos um pouquinho mais o texto para não encostar na área de toque expandida */
-    max-width: 85%; 
+    bottom: 20px; /* Voltamos para uma altura limpa e confortável */
+    max-width: 75%; 
   }
 
   .hero-featured-info strong {
@@ -1724,36 +1757,17 @@ main {
     font-size: 0.72rem;
   }
 
-  /* CENTRALIZAÇÃO DOS PONTINHOS NO MOBILE */
+  /* ESCONDE OS PONTINHOS NO MOBILE DEFINITIVAMENTE */
   .hero-carousel-dots {
-    display: flex !important;
-    position: absolute !important;
-    left: 50% !important; /* Move o início do bloco para o meio da tela */
-    right: auto !important;
-    bottom: 12px !important;
-    transform: translateX(-50%) !important; /* Puxa o bloco de volta para centralizar perfeitamente */
-    z-index: 10 !important;
-    gap: 8px !important; /* Aumentado o espaço entre eles para evitar cliques errados */
+    display: none !important;
   }
 
-  /* EXPANSÃO DA ÁREA DE TOQUE DOS BOTÕES */
-  .hero-carousel-dots button {
-    width: 22px !important;
-    height: 5px !important;
-    background: rgba(255, 255, 255, 0.35) !important;
-    
-    /* TRUQUE: Cria uma área invisível de 10px em volta de cada pontinho */
-    border: 10px solid transparent !important; 
-    background-clip: padding-box !important; /* Garante que o fundo branco não pinte a borda invisível */
-    
-    box-sizing: content-box !important; /* Mantém o tamanho do pontinho e adiciona a borda por fora */
-    cursor: pointer !important;
-  }
-
-  /* Mantém o pontinho ativo com a cor dourada */
-  .hero-carousel-dots button.is-active {
-    background: #f3d58f !important;
-    background-clip: padding-box !important;
+  /* Deixa as setas um pouco menores e anatômicas no celular */
+  .hero-arrow {
+    width: 38px;
+    height: 38px;
+    font-size: 16px;
+    background: rgba(0, 0, 0, 0.5) !important;
   }
 
   h1 {

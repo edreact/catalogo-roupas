@@ -2,17 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { formatCurrency } from '../../utils/formatters.js';
 
-const getHeroImage = (product) => {
-  const url = product?.imagemDestaque;
-  if (!url) return '';
-  
-  // Se for uma imagem do Cloudinary, injeta parâmetros de corte quadrado inteligente (c_fill, g_auto, w_600, h_600)
-  if (url.includes('://cloudinary.com')) {
-    return url.replace('/upload/', '/upload/c_fill,g_auto,w_600,h_600/');
-  }
-  
-  return url;
-};
+const getHeroImage = (product) => product?.imagemDestaque || '';
 
 export default function Hero({ featuredProducts = [] }) {
   const carouselProducts = useMemo(
@@ -40,6 +30,17 @@ export default function Hero({ featuredProducts = [] }) {
       setActiveIndex(0);
     }
   }, [activeIndex, carouselProducts.length]);
+
+  // Funções manuais para as setas laterais
+  const nextSlide = (e) => {
+    e.preventDefault(); // Impede o clique de ir para o produto
+    setActiveIndex((prev) => (prev + 1) % carouselProducts.length);
+  };
+
+  const prevSlide = (e) => {
+    e.preventDefault(); // Impede o clique de ir para o produto
+    setActiveIndex((prev) => (prev - 1 + carouselProducts.length) % carouselProducts.length);
+  };
 
   return (
     <section className="hero-section">
@@ -78,6 +79,29 @@ export default function Hero({ featuredProducts = [] }) {
               );
             })}
 
+            {/* NOVOS BOTÕES DE SETA - VISÍVEIS NO MOBILE */}
+            {carouselProducts.length > 1 && (
+              <>
+                <button 
+                  type="button" 
+                  className="hero-arrow hero-arrow-left" 
+                  onClick={prevSlide}
+                  aria-label="Slide anterior"
+                >
+                  &#10094;
+                </button>
+                <button 
+                  type="button" 
+                  className="hero-arrow hero-arrow-right" 
+                  onClick={nextSlide}
+                  aria-label="Próximo slide"
+                >
+                  &#10095;
+                </button>
+              </>
+            )}
+
+            {/* Pontinhos originais mantidos (o CSS vai esconder no mobile) */}
             {carouselProducts.length > 1 && (
               <div className="hero-carousel-dots" aria-label="Selecionar produto em destaque">
                 {carouselProducts.map((product, index) => (
