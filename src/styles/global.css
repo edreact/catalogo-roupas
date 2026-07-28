@@ -1687,16 +1687,15 @@ main {
     padding-inline: 10px;
   }
 
-    .hero-media {
+  .hero-media {
     width: 100%;
     aspect-ratio: 1 / 1; /* Garante que o slide continue perfeitamente quadrado no celular */
   }
 
-
   .hero-featured-info {
     left: 14px;
-    bottom: 16px;
-    max-width: 68%;
+    bottom: 42px; /* Subimos o texto para dar espaço aos pontinhos logo abaixo */
+    max-width: 85%; /* Aumentado um pouco para acomodar melhor os textos no mobile */
   }
 
   .hero-featured-info strong {
@@ -1725,8 +1724,28 @@ main {
     font-size: 0.72rem;
   }
 
+  /* ATIVAÇÃO E CORREÇÃO DOS PONTINHOS NO MOBILE */
   .hero-carousel-dots {
-    display: none;
+    display: flex !important; /* Força os pontinhos a aparecerem no celular */
+    position: absolute !important;
+    left: 14px !important; /* Alinha perfeitamente com o início do texto */
+    right: auto !important;
+    bottom: 14px !important; /* Fixa na base inferior do quadrado */
+    transform: none !important;
+    z-index: 10 !important; /* Coloca na camada acima de tudo para aceitar o toque */
+    gap: 6px !important;
+  }
+
+  /* Ajuste de tamanho anatômico para o toque no celular */
+  .hero-carousel-dots button {
+    width: 22px !important;
+    height: 5px !important;
+    background: rgba(255, 255, 255, 0.35) !important;
+  }
+
+  /* Pontinho ativo ganha a cor dourada idêntica à do letreiro */
+  .hero-carousel-dots button.is-active {
+    background: #f3d58f !important;
   }
 
   h1 {
