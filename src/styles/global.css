@@ -1694,8 +1694,8 @@ main {
 
   .hero-featured-info {
     left: 14px;
-    bottom: 42px; /* Subimos o texto para dar espaço aos pontinhos logo abaixo */
-    max-width: 85%; /* Aumentado um pouco para acomodar melhor os textos no mobile */
+    bottom: 46px; /* Subimos um pouquinho mais o texto para não encostar na área de toque expandida */
+    max-width: 85%; 
   }
 
   .hero-featured-info strong {
@@ -1724,28 +1724,36 @@ main {
     font-size: 0.72rem;
   }
 
-  /* ATIVAÇÃO E CORREÇÃO DOS PONTINHOS NO MOBILE */
+  /* CENTRALIZAÇÃO DOS PONTINHOS NO MOBILE */
   .hero-carousel-dots {
-    display: flex !important; /* Força os pontinhos a aparecerem no celular */
+    display: flex !important;
     position: absolute !important;
-    left: 14px !important; /* Alinha perfeitamente com o início do texto */
+    left: 50% !important; /* Move o início do bloco para o meio da tela */
     right: auto !important;
-    bottom: 14px !important; /* Fixa na base inferior do quadrado */
-    transform: none !important;
-    z-index: 10 !important; /* Coloca na camada acima de tudo para aceitar o toque */
-    gap: 6px !important;
+    bottom: 12px !important;
+    transform: translateX(-50%) !important; /* Puxa o bloco de volta para centralizar perfeitamente */
+    z-index: 10 !important;
+    gap: 8px !important; /* Aumentado o espaço entre eles para evitar cliques errados */
   }
 
-  /* Ajuste de tamanho anatômico para o toque no celular */
+  /* EXPANSÃO DA ÁREA DE TOQUE DOS BOTÕES */
   .hero-carousel-dots button {
     width: 22px !important;
     height: 5px !important;
     background: rgba(255, 255, 255, 0.35) !important;
+    
+    /* TRUQUE: Cria uma área invisível de 10px em volta de cada pontinho */
+    border: 10px solid transparent !important; 
+    background-clip: padding-box !important; /* Garante que o fundo branco não pinte a borda invisível */
+    
+    box-sizing: content-box !important; /* Mantém o tamanho do pontinho e adiciona a borda por fora */
+    cursor: pointer !important;
   }
 
-  /* Pontinho ativo ganha a cor dourada idêntica à do letreiro */
+  /* Mantém o pontinho ativo com a cor dourada */
   .hero-carousel-dots button.is-active {
     background: #f3d58f !important;
+    background-clip: padding-box !important;
   }
 
   h1 {
