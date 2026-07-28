@@ -341,6 +341,18 @@ main {
 }
 
 /* Home */
+
+.hero-featured-info span,
+.hero-featured-info strong,
+.hero-featured-info p,
+.hero-featured-info b,
+.hero-featured-info small {
+  color: #ffffff !important; /* Garante que todo o texto fique branco */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.85), 
+               0px 1px 3px rgba(0, 0, 0, 0.9) !important; /* Sombra preta robusta e nítida */
+}
+
+
 .hero-section {
   width: min(100% - 32px, var(--max-width));
   min-height: calc(100vh - 118px);
@@ -377,6 +389,144 @@ main {
     linear-gradient(145deg, rgba(20, 20, 20, 0.1), transparent 42%),
     linear-gradient(115deg, #efe5d8 0%, #d7bfb0 46%, #1d1c1a 46%, #1d1c1a 100%);
   box-shadow: var(--shadow);
+}
+
+.hero-featured-carousel {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+}
+
+.hero-featured-carousel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 42%, rgba(0, 0, 0, 0.64) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34), transparent 45%);
+}
+
+.hero-featured-slide {
+  position: absolute;
+  inset: 0;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.035);
+  transition:
+    opacity 780ms ease,
+    transform 1200ms ease;
+}
+
+.hero-featured-slide.is-active {
+  z-index: 1;
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.hero-featured-slide img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  aspect-ratio: 1 / 1; /* Força a imagem a ser um quadrado perfeito */
+  object-fit: cover;   /* Corta as sobras das suas fotos altas sem distorcer */
+  object-position: center center; /* Mantém o foco no meio da foto */
+}
+
+
+.hero-featured-slide::before,
+.hero-featured-slide::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.hero-featured-info {
+  position: absolute;
+  left: clamp(18px, 4vw, 34px);
+  right: clamp(18px, 4vw, 34px);
+  bottom: clamp(18px, 4vw, 34px);
+  z-index: 3;
+  max-width: 520px;
+  color: #ffffff;
+  text-shadow: 0 1px 22px rgba(0, 0, 0, 0.4);
+}
+
+.hero-featured-info span {
+  display: block;
+  margin-bottom: 8px;
+  color: #f3d58f;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-featured-info strong {
+  display: block;
+  max-width: 18ch;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 4.4vw, 4.25rem);
+  font-weight: 500;
+  line-height: 0.98;
+}
+
+.hero-featured-info p {
+  max-width: 38rem;
+  margin: 12px 0 18px;
+  display: -webkit-box;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 1rem;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.hero-featured-info div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-featured-info b {
+  font-size: 1.35rem;
+}
+
+.hero-featured-info small {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.64);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  font-weight: 900;
+}
+
+.hero-carousel-dots {
+  position: absolute;
+  right: clamp(16px, 3vw, 28px);
+  bottom: clamp(16px, 3vw, 28px);
+  z-index: 4;
+  display: flex;
+  gap: 8px;
+}
+
+.hero-carousel-dots button {
+  width: 34px;
+  height: 6px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.hero-carousel-dots button.is-active {
+  background: #ffffff;
 }
 
 .hero-look {
@@ -1319,9 +1469,103 @@ main {
     padding-top: 20px;
   }
 
-  .hero-media {
-    order: 1;
-    min-height: 430px;
+.hero-media {
+  order: 2;
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Torna todo o contêiner do slide um quadrado perfeito */
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, rgba(20, 20, 20, 0.1), transparent 42%),
+    linear-gradient(115deg, #efe5d8 0%, #d7bfb0 46%, #1d1c1a 46%, #1d1c1a 100%);
+  box-shadow: var(--shadow);
+}
+
+
+  .hero-featured-carousel::before {
+    display: block;
+    background:
+      linear-gradient(180deg, transparent 46%, rgba(0, 0, 0, 0.56) 100%),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.18), transparent 52%);
+  }
+
+  .hero-featured-slide {
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .hero-featured-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .hero-featured-slide::before,
+  .hero-featured-slide::after {
+    display: none;
+  }
+/*color: var(--muted); Muda a cor da hero quando modo claro ou escuro*/
+  .hero-featured-info {
+    left: 16px;
+    right: auto;
+    bottom: 18px;
+    max-width: min(360px, 68%);
+    color: var(--muted);
+    text-shadow: none;
+  }
+
+  :root[data-theme="dark"] .hero-featured-info {
+    color: #ffffff;
+  }
+
+  .hero-featured-info strong {
+    color: inherit;
+    max-width: 16ch;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: clamp(1.3rem, 4.8vw, 2rem);
+    font-weight: 850;
+    line-height: 1.06;
+  }
+
+  .hero-featured-info span,
+  .hero-featured-info p {
+    color: inherit;
+  }
+
+  .hero-featured-info span {
+    margin-bottom: 6px;
+    font-size: 0.68rem;
+  }
+
+  .hero-featured-info p {
+    max-width: 28ch;
+    margin: 8px 0 10px;
+    font-size: 0.86rem;
+    line-height: 1.3;
+    -webkit-line-clamp: 1;
+  }
+
+  .hero-featured-info b {
+    font-size: 1rem;
+  }
+
+  .hero-featured-info small {
+    min-height: 30px;
+    padding: 5px 9px;
+    border-color: currentColor;
+    font-size: 0.78rem;
+  }
+
+  .hero-carousel-dots {
+    right: 16px;
+    bottom: 18px;
+    gap: 6px;
+  }
+
+  .hero-carousel-dots button {
+    width: 20px;
+    height: 5px;
   }
 
   .hero-content {
@@ -1439,8 +1683,46 @@ main {
     padding-inline: 10px;
   }
 
-  .hero-media {
-    min-height: 330px;
+    .hero-media {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Garante que o slide continue perfeitamente quadrado no celular */
+  }
+
+
+  .hero-featured-info {
+    left: 14px;
+    bottom: 16px;
+    max-width: 68%;
+  }
+
+  .hero-featured-info strong {
+    max-width: 15ch;
+    font-size: 1.28rem;
+  }
+
+  .hero-featured-info span {
+    font-size: 0.62rem;
+  }
+
+  .hero-featured-info p {
+    max-width: 24ch;
+    margin: 6px 0 8px;
+    font-size: 0.78rem;
+    -webkit-line-clamp: 1;
+  }
+
+  .hero-featured-info b {
+    font-size: 0.94rem;
+  }
+
+  .hero-featured-info small {
+    min-height: 28px;
+    padding: 4px 8px;
+    font-size: 0.72rem;
+  }
+
+  .hero-carousel-dots {
+    display: none;
   }
 
   h1 {

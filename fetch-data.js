@@ -192,6 +192,8 @@ function normalizeProduct(product, index = 0) {
       product.DescricaoCurta || product.DescricaoCompleta || product.description || "",
     fullDescription:
       product.DescricaoCompleta || product.fullDescription || product.description || "",
+    imagemDestaque:
+      product.ImagemDestaque || product.imagemDestaque || product.heroImage || "",
     material: product.Material || product.material || "",
     occasion: product.Ocasiao || product.occasion || "",
     related: product.Relacionados || product.related || "",
@@ -250,6 +252,8 @@ function toRawProduct(product) {
     Quantidade: product.Quantidade || product.quantity || "",
     DescricaoCurta: product.DescricaoCurta || product.description || "",
     DescricaoCompleta: product.DescricaoCompleta || product.fullDescription || "",
+    imagemDestaque:
+      product.ImagemDestaque || product.imagemDestaque || product.heroImage || "",
     Material: product.Material || product.material || "",
     Ocasiao: product.Ocasiao || product.occasion || "",
     Relacionados: product.Relacionados || product.related || "",

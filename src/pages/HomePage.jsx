@@ -17,12 +17,21 @@ const sortByRecent = (items) =>
 
 export default function HomePage() {
   const products = listaProdutos.products || [];
+  
   const featuredProducts = sortByRecent(
-    products.filter((product) => product.isFeatured || product.tags?.includes('destaque')),
-  ).slice(0, 3);
+    products.filter(
+      (product) =>
+        product.featured ||
+        product.isFeatured ||
+        product.tags?.includes('destaque') ||
+        product.badges?.includes('Destaque'),
+    ),
+  ); // Removido o .slice(0, 10) daqui
+
   const promotionalProducts = sortByRecent(
     products.filter((product) => product.isPromotion || product.isNew || product.salePrice),
   ).slice(0, 3);
+
   const sectionConfig = [
   {
     title: "Oferta do dia",
@@ -65,8 +74,8 @@ const sections = sectionConfig
 
   return (
     <>
-      {/* <Hero /> */}
-      {/*<BannerStrip />} */}
+      <Hero featuredProducts={featuredProducts} />
+      <BannerStrip />
 
       {sections.map((section) => (
         <SectionPreview
