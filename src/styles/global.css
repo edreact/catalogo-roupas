@@ -523,10 +523,12 @@ main {
   border-radius: 999px;
   padding: 0;
   background: rgba(255, 255, 255, 0.42);
+  cursor: pointer; /* Adiciona a mãozinha de clique */
+  transition: background 0.3s ease;
 }
 
 .hero-carousel-dots button.is-active {
-  background: #ffffff;
+  background: #f3d58f !important; 
 }
 
 .hero-look {
@@ -1558,8 +1560,10 @@ main {
   }
 
   .hero-carousel-dots {
-    right: 16px;
-    bottom: 18px;
+    display: flex; /* ATIVADO: Agora os pontinhos aparecem no celular */
+    right: 50%;
+    transform: translateX(50%); /* Centraliza os pontinhos na tela do celular */
+    bottom: 16px;
     gap: 6px;
   }
 
