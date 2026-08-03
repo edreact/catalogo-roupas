@@ -16,7 +16,7 @@ export default function ProductDetails({ product }) {
 
   return (
     <details className="product-details-dropdown">
-      <summary>Ver detalhes do produto</summary>
+      <summary className="eyebrow">Ver detalhes do produto</summary>
 
       <div className="product-details">
         {details.map(({ key, value }) => (

@@ -1310,15 +1310,46 @@ main {
 }
 
 .product-details-dropdown summary {
-  padding: 12px 0;
+  width: fit-content;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  box-shadow: 0 10px 28px rgba(25, 22, 18, 0.05);
   cursor: pointer;
   font-weight: 600;
   list-style: none;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .product-details-dropdown summary::after {
   content: "+";
-  float: right;
+  min-width: 18px;
+  min-height: 18px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.product-details-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+.product-details-dropdown summary:hover {
+  border-color: color-mix(in srgb, var(--accent) 46%, var(--line));
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  box-shadow: 0 14px 34px rgba(25, 22, 18, 0.08);
 }
 
 .product-details-dropdown[open] summary::after {
@@ -1327,6 +1358,11 @@ main {
 
 .product-details-dropdown .product-details {
   margin-top: 1rem;
+  border: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  box-shadow: 0 16px 40px rgba(25, 22, 18, 0.06);
 }
 
 .product-details-dropdown .product-details p {
