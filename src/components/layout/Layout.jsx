@@ -1,4 +1,5 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import ThemeToggle from "../ui/ThemeToggle.jsx";
 import Footer from "./Footer";
 
@@ -9,6 +10,19 @@ const navItems = [
 ];
 
 export default function Layout() {
+  const location = useLocation();
+
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  useEffect(() => {
+    scrollToTop();
+  }, [location.pathname, location.search]);
+
   return (
     <div className="app-shell">
       <header className="site-header">
@@ -16,6 +30,7 @@ export default function Layout() {
           to="/"
           className="brand"
           aria-label="Ir para a pagina inicial"
+          onClick={scrollToTop}
         >
           <span className="brand-mark">CF</span>
 
@@ -27,7 +42,7 @@ export default function Layout() {
 
         <nav className="main-nav" aria-label="Navegacao principal">
           {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to}>
+            <NavLink key={item.to} to={item.to} onClick={scrollToTop}>
               {item.label}
             </NavLink>
           ))}

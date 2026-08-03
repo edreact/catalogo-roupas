@@ -774,7 +774,7 @@ main {
 
 .product-card {
   min-height: 390px;
-  padding: 10px;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
@@ -811,7 +811,7 @@ main {
 .product-art {
   min-height: 310px;
   overflow: hidden;
-  border-radius: calc(var(--radius) - 2px);
+  border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
   background: var(--surface-soft);
 }
 
@@ -888,7 +888,7 @@ main {
 
 .product-card-body {
   flex: 1;
-  padding: 15px 4px 4px;
+  padding: 15px 14px 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -971,7 +971,7 @@ main {
 
 .product-image-placeholder {
   aspect-ratio: 4 / 5;
-  border-radius: calc(var(--radius) - 2px);
+  border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
   background:
     linear-gradient(
       110deg,
@@ -986,7 +986,7 @@ main {
 
 .product-copy-placeholder {
   height: 13px;
-  margin-top: 14px;
+  margin: 14px 14px 0;
   border-radius: 99px;
   background: var(--surface-soft);
 }
