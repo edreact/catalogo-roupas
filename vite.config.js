@@ -6,6 +6,7 @@ import react from '@vitejs/plugin-react';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outputPath = path.join(__dirname, "src", "data", "produtos.json");
+const publicOutputPath = path.join(__dirname, "public", "produtos.json");
 const imageTones = ["rose", "sand", "wine", "denim", "ivory", "black"];
 
 await generateStaticCatalog();
@@ -56,9 +57,19 @@ async function generateStaticCatalog() {
   };
 
   await mkdir(path.dirname(outputPath), { recursive: true });
+  await mkdir(path.dirname(publicOutputPath), { recursive: true });
+
   await writeFile(outputPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
+  await writeFile(
+    publicOutputPath,
+    `${JSON.stringify(catalog, null, 2)}\n`,
+    "utf8",
+  );
 
   console.log(`Catalogo estatico gerado em ${path.relative(__dirname, outputPath)}.`);
+  console.log(
+    `Catalogo publico gerado em ${path.relative(__dirname, publicOutputPath)}.`,
+  );
   console.log(`${products.length} produtos ativos gravados.`);
 }
 

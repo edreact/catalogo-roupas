@@ -1,7 +1,9 @@
+let catalogCache;
+
 export default async (request, context) => {
   const url = new URL(request.url);
 
-  // Executa somente nas páginas de produto
+  // Executa somente nas paginas de produto.
   const match = url.pathname.match(/^\/produto\/([^/]+)/);
 
   if (!match) {
@@ -10,58 +12,40 @@ export default async (request, context) => {
 
   const userAgent = request.headers.get("user-agent") || "";
 
-  // Bots que geram preview
+  // Bots que geram preview.
   const BOT_REGEX =
     /(facebookexternalhit|Facebot|WhatsApp|Twitterbot|TelegramBot|Slackbot|Discordbot|LinkedInBot|Googlebot|SkypeUriPreview|Pinterest|Applebot)/i;
 
   const isBot = BOT_REGEX.test(userAgent);
 
-  // Usuário normal continua usando o React normalmente
+  // Usuario normal continua usando o React normalmente.
   if (!isBot) {
     return context.next();
   }
 
   const id = decodeURIComponent(match[1]);
 
-  const api = Deno.env.get("CATALOG_API_URL");
-
-  if (!api) {
-    console.error("CATALOG_API_URL não configurada.");
-
-    return context.next();
-  }
-
   try {
-    const response = await fetch(`${api}?codigo=${encodeURIComponent(id)}`, {
-      headers: {
-        Accept: "application/json",
-      },
-    });
+    await loadStaticCatalog(url);
 
-    if (!response.ok) {
-      console.error("Erro ao consultar a API.");
-
-      return context.next();
-    }
-
-    const data = await response.json();
-
-    const product = data.produto;
+    const product = findStaticProduct(id) || (await fetchProductFromApi(id));
 
     if (!product) {
       return context.next();
     }
 
-    const title = escapeHtml(product.Nome || "");
+    const title = escapeHtml(product.name || product.Nome || "");
 
     const description = escapeHtml(
-      product.DescricaoCurta || product.DescricaoCompleta || "",
+      product.description ||
+        product.fullDescription ||
+        product.DescricaoCurta ||
+        product.DescricaoCompleta ||
+        "",
     );
 
     const img = Number(url.searchParams.get("img")) || 1;
-
-    const image = product[`Imagem${img}`] || product.Imagem1 || "";
-
+    const image = getProductImage(product, img);
     const pageUrl = url.href;
 
     const html = `<!DOCTYPE html>
@@ -135,6 +119,76 @@ content="${image}">
     return context.next();
   }
 };
+
+async function loadStaticCatalog(requestUrl) {
+  if (catalogCache) {
+    return catalogCache;
+  }
+
+  const catalogUrl = new URL("/produtos.json", requestUrl);
+  const response = await fetch(catalogUrl);
+
+  if (!response.ok) {
+    console.error("Erro ao carregar catalogo estatico.");
+
+    catalogCache = {};
+    return catalogCache;
+  }
+
+  catalogCache = await response.json();
+  return catalogCache;
+}
+
+function findStaticProduct(id) {
+  const normalizedId = String(id || "");
+  const products = catalogCache?.products || [];
+
+  return products.find(
+    (product) =>
+      String(product.slug || "") === normalizedId ||
+      String(product.code || "") === normalizedId ||
+      String(product.raw?.Codigo || "") === normalizedId,
+  );
+}
+
+async function fetchProductFromApi(id) {
+  const api = Deno.env.get("CATALOG_API_URL");
+
+  if (!api) {
+    return null;
+  }
+
+  const response = await fetch(`${api}?codigo=${encodeURIComponent(id)}`, {
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    console.error("Erro ao consultar a API.");
+
+    return null;
+  }
+
+  const data = await response.json();
+
+  return data.produto || null;
+}
+
+function getProductImage(product, imageNumber) {
+  const imageIndex = Math.max(imageNumber - 1, 0);
+
+  return (
+    product.images?.[imageIndex] ||
+    product.raw?.[`Imagem${imageNumber}`] ||
+    product[`Imagem${imageNumber}`] ||
+    product.imagemDestaque ||
+    product.raw?.imagemDestaque ||
+    product.raw?.Imagem1 ||
+    product.Imagem1 ||
+    ""
+  );
+}
 
 function escapeHtml(text = "") {
   return String(text)
