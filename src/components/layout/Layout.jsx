@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import ThemeToggle from "../ui/ThemeToggle.jsx";
 import Footer from "./Footer";
+import { scrollToPageTop } from "../../utils/scroll.js";
 
 const navItems = [
   { to: "/", label: "Inicio" },
@@ -12,17 +13,8 @@ const navItems = [
 export default function Layout() {
   const location = useLocation();
 
-  function scrollToTopInstantly() {
-    const root = document.documentElement;
-    const previousScrollBehavior = root.style.scrollBehavior;
-
-    root.style.scrollBehavior = "auto";
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    root.style.scrollBehavior = previousScrollBehavior;
-  }
-
-  useEffect(() => {
-    scrollToTopInstantly();
+  useLayoutEffect(() => {
+    scrollToPageTop();
   }, [location.pathname, location.search]);
 
   return (
@@ -32,7 +24,7 @@ export default function Layout() {
           to="/"
           className="brand"
           aria-label="Ir para a pagina inicial"
-          onClick={scrollToTopInstantly}
+          onClick={scrollToPageTop}
         >
           <span className="brand-mark">CF</span>
 
@@ -44,7 +36,7 @@ export default function Layout() {
 
         <nav className="main-nav" aria-label="Navegacao principal">
           {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} onClick={scrollToTopInstantly}>
+            <NavLink key={item.to} to={item.to} onClick={scrollToPageTop}>
               {item.label}
             </NavLink>
           ))}

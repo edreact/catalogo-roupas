@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import ProductBadges from "../components/product/ProductBadges.jsx";
 import listaProdutos from "../data/produtos.json";
 import { formatCurrency } from "../utils/formatters.js";
@@ -8,6 +8,7 @@ import ProductDetails from "../components/product/ProductDetails.jsx";
 import FavoritesWhatsAppFloat from "../components/favorites/FavoritesWhatsAppFloat.jsx";
 import ProductRelated from "../components/product/ProductRelated.jsx";
 import { gerarLinkWhatsApp } from "../utils/whatsapp";
+import { scrollToPageTop } from "../utils/scroll.js";
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -16,11 +17,8 @@ export default function ProductPage() {
     (item) => item.slug === slug || item.code === slug,
   );
 
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+  useLayoutEffect(() => {
+    scrollToPageTop();
   }, [slug]);
 
   return (
