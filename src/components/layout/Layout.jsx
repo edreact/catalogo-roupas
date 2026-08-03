@@ -12,15 +12,17 @@ const navItems = [
 export default function Layout() {
   const location = useLocation();
 
-  function scrollToTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+  function scrollToTopInstantly() {
+    const root = document.documentElement;
+    const previousScrollBehavior = root.style.scrollBehavior;
+
+    root.style.scrollBehavior = "auto";
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    root.style.scrollBehavior = previousScrollBehavior;
   }
 
   useEffect(() => {
-    scrollToTop();
+    scrollToTopInstantly();
   }, [location.pathname, location.search]);
 
   return (
@@ -30,7 +32,7 @@ export default function Layout() {
           to="/"
           className="brand"
           aria-label="Ir para a pagina inicial"
-          onClick={scrollToTop}
+          onClick={scrollToTopInstantly}
         >
           <span className="brand-mark">CF</span>
 
@@ -42,7 +44,7 @@ export default function Layout() {
 
         <nav className="main-nav" aria-label="Navegacao principal">
           {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} onClick={scrollToTop}>
+            <NavLink key={item.to} to={item.to} onClick={scrollToTopInstantly}>
               {item.label}
             </NavLink>
           ))}
