@@ -1196,6 +1196,30 @@ main {
     var(--surface-soft);
 }
 
+.product-gallery-placeholder.product-art-rose {
+  background: linear-gradient(145deg, #f7d6d8, #b75567 58%, #4d1620);
+}
+
+.product-gallery-placeholder.product-art-sand {
+  background: linear-gradient(145deg, #f8ead5, #b99972 56%, #332821);
+}
+
+.product-gallery-placeholder.product-art-wine {
+  background: linear-gradient(145deg, #f0cad1, #8e263d 54%, #211015);
+}
+
+.product-gallery-placeholder.product-art-denim {
+  background: linear-gradient(145deg, #d8e5ed, #527493 56%, #162332);
+}
+
+.product-gallery-placeholder.product-art-ivory {
+  background: linear-gradient(145deg, #fffaf0, #d8c9ad 56%, #746a5a);
+}
+
+.product-gallery-placeholder.product-art-black {
+  background: linear-gradient(145deg, #e4e0dc, #55524e 46%, #111111);
+}
+
 .product-gallery-placeholder img {
   display: block;
   object-fit: contain;
