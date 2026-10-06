@@ -243,6 +243,8 @@ function normalizeProduct(product, index = 0) {
       Array.from({ length: 10 }, (_, i) => product[`Imagem${i + 1}`]).filter(
         Boolean,
       ),
+    videoUrl: product.videoUrl || product.VideoUrl || "",
+    videoPosterUrl: product.videoPosterUrl || product.VideoPosterUrl || "",
     active:
       product.Ativo === true ||
       product.Ativo === "TRUE" ||
