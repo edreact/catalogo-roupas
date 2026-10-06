@@ -4,12 +4,42 @@ import FavoriteButton from "../favorites/FavoriteButton.jsx";
 import { compartilharProdutoWhatsApp } from "../../utils/whatsapp";
 import { FiShare2 } from "react-icons/fi";
 
+const CLOUDINARY_TRANSFORM = "f_auto,q_auto";
+
+function addCloudinaryTransform(url) {
+  if (typeof url !== "string" || !url.includes("/upload/")) {
+    return url;
+  }
+
+  if (url.includes("/upload/f_auto,q_auto/")) {
+    return url;
+  }
+
+  return url.replace("/upload/", `/upload/${CLOUDINARY_TRANSFORM}/`);
+}
+
+function getImagePosterUrl(url, fallback) {
+  if (typeof url !== "string" || !url.includes("/image/upload/")) {
+    return fallback;
+  }
+
+  return addCloudinaryTransform(url);
+}
+
 export default function ProductGallery({ product }) {
-  const images = product?.images || [];
+  const images = (product?.images || []).filter(Boolean);
+  const videoUrl = product?.videoUrl;
+  const videoPosterUrl = product?.videoPosterUrl;
+  const media = videoUrl
+    ? [
+        { type: "video", src: addCloudinaryTransform(videoUrl) },
+        ...images.map((src) => ({ type: "image", src: addCloudinaryTransform(src) })),
+      ]
+    : images.map((src) => ({ type: "image", src: addCloudinaryTransform(src) }));
   const initialImage = (() => {
     const img = Number(new URLSearchParams(window.location.search).get("img"));
 
-    return img > 0 ? img - 1 : 0;
+    return img > 0 ? Math.min(img - 1, media.length - 1) : 0;
   })();
 
   const [current, setCurrent] = useState(initialImage);
@@ -18,7 +48,7 @@ export default function ProductGallery({ product }) {
 
   const MIN_SWIPE_DISTANCE = 50;
 
-  if (!images.length) {
+  if (!media.length) {
     return <div className="product-gallery-placeholder">Sem imagem</div>;
   }
 
@@ -48,12 +78,14 @@ export default function ProductGallery({ product }) {
   }
 
   function previousImage() {
-    setCurrent((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setCurrent((prev) => (prev === 0 ? media.length - 1 : prev - 1));
   }
 
   function nextImage() {
-    setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setCurrent((prev) => (prev === media.length - 1 ? 0 : prev + 1));
   }
+
+  const currentMedia = media[current];
 
   return (
     <div className="product-gallery">
@@ -73,9 +105,24 @@ export default function ProductGallery({ product }) {
           <FiShare2 size={20} className="share-icon" />
         </button>
 
-        <img src={images[current]} alt={product.name} />
+        {currentMedia.type === "video" ? (
+          <video
+            className="gallery-video"
+            src={currentMedia.src}
+            poster={getImagePosterUrl(videoPosterUrl, images[0])}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="none"
+            controls
+            aria-label={`Vídeo de introdução de ${product.name}`}
+          />
+        ) : (
+          <img src={currentMedia.src} alt={product.name} />
+        )}
 
-        {images.length > 1 && (
+        {media.length > 1 && (
           <>
             <button className="gallery-arrow left" onClick={previousImage}>
               <FiChevronLeft />
@@ -88,15 +135,23 @@ export default function ProductGallery({ product }) {
         )}
       </div>
 
-      {images.length > 1 && (
+      {media.length > 1 && (
         <div className="product-thumbnails">
-          {images.map((image, index) => (
+          {media.map((item, index) => (
             <button
-              key={index}
+              key={`${item.type}-${index}`}
               className={current === index ? "thumbnail active" : "thumbnail"}
               onClick={() => setCurrent(index)}
+              aria-label={item.type === "video" ? "Ver vídeo" : `Ver imagem ${index}`}
             >
-              <img src={image} alt={`${product.name} ${index + 1}`} />
+              {item.type === "video" ? (
+                <img
+                  src={getImagePosterUrl(videoPosterUrl, images[0])}
+                  alt={`${product.name} - vídeo`}
+                />
+              ) : (
+                <img src={item.src} alt={`${product.name} ${index + 1}`} />
+              )}
             </button>
           ))}
         </div>
