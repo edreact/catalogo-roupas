@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import FavoriteButton from "../favorites/FavoriteButton.jsx";
 import { compartilharProdutoWhatsApp } from "../../utils/whatsapp";
@@ -43,10 +43,31 @@ export default function ProductGallery({ product }) {
   })();
 
   const [current, setCurrent] = useState(initialImage);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [showVideoPlayButton, setShowVideoPlayButton] = useState(false);
+  const videoRef = useRef(null);
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
 
   const MIN_SWIPE_DISTANCE = 50;
+  const currentMedia = media[current];
+
+  useEffect(() => {
+    setIsVideoPlaying(false);
+    setShowVideoPlayButton(false);
+  }, [current]);
+
+  useEffect(() => {
+    if (currentMedia?.type !== "video" || isVideoPlaying) {
+      return undefined;
+    }
+
+    const timer = window.setTimeout(() => {
+      setShowVideoPlayButton(true);
+    }, 1000);
+
+    return () => window.clearTimeout(timer);
+  }, [currentMedia?.type, isVideoPlaying]);
 
   if (!media.length) {
     return <div className="product-gallery-placeholder">Sem imagem</div>;
@@ -85,10 +106,18 @@ export default function ProductGallery({ product }) {
     setCurrent((prev) => (prev === media.length - 1 ? 0 : prev + 1));
   }
 
-  const currentMedia = media[current];
+  function playVideo() {
+    if (!videoRef.current) {
+      return;
+    }
+
+    setShowVideoPlayButton(false);
+    setIsVideoPlaying(true);
+    videoRef.current.play().catch(() => setIsVideoPlaying(false));
+  }
 
   return (
-    <div className="product-gallery">
+    <div className={`product-gallery ${isVideoPlaying ? "video-playing" : ""}`}>
       <div
         className={`product-gallery-placeholder product-art-${product.imageTone}`}
         onTouchStart={handleTouchStart}
@@ -106,18 +135,39 @@ export default function ProductGallery({ product }) {
         </button>
 
         {currentMedia.type === "video" ? (
-          <video
-            className="gallery-video"
-            src={currentMedia.src}
-            poster={getImagePosterUrl(videoPosterUrl, images[0])}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="none"
-            controls
-            aria-label={`Vídeo de introdução de ${product.name}`}
-          />
+          <>
+            <img
+              className="gallery-video-poster"
+              src={getImagePosterUrl(videoPosterUrl, images[0])}
+              alt={`${product.name} - capa do vídeo`}
+            />
+            <video
+              ref={videoRef}
+              className={`gallery-video ${isVideoPlaying ? "is-playing" : ""}`}
+              src={currentMedia.src}
+              poster={getImagePosterUrl(videoPosterUrl, images[0])}
+              loop
+              muted
+              playsInline
+              preload="none"
+              controls={isVideoPlaying}
+              aria-label={`Vídeo de introdução de ${product.name}`}
+              onPlay={() => setIsVideoPlaying(true)}
+              onPause={() => setIsVideoPlaying(false)}
+            />
+            {showVideoPlayButton && (
+              <button
+                className="gallery-video-play"
+                type="button"
+                onClick={playVideo}
+                aria-label="Reproduzir vídeo"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 5.5 18.5 12 7 18.5Z" />
+                </svg>
+              </button>
+            )}
+          </>
         ) : (
           <img src={currentMedia.src} alt={product.name} />
         )}
