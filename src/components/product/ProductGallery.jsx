@@ -19,17 +19,18 @@ function addCloudinaryTransform(url) {
 }
 
 function getImagePosterUrl(url, fallback) {
-  if (typeof url !== "string" || !url.includes("/image/upload/")) {
+  if (typeof url !== "string" || !url.trim()) {
     return fallback;
   }
 
-  return addCloudinaryTransform(url);
+  return url.includes("/image/upload/") ? addCloudinaryTransform(url) : url;
 }
 
 export default function ProductGallery({ product }) {
   const images = (product?.images || []).filter(Boolean);
   const videoUrl = product?.videoUrl;
   const videoPosterUrl = product?.videoPosterUrl;
+  const videoPoster = getImagePosterUrl(videoPosterUrl, images[0]);
   const media = videoUrl
     ? [
         { type: "video", src: addCloudinaryTransform(videoUrl) },
@@ -138,14 +139,14 @@ export default function ProductGallery({ product }) {
           <>
             <img
               className="gallery-video-poster"
-              src={getImagePosterUrl(videoPosterUrl, images[0])}
+              src={videoPoster}
               alt={`${product.name} - capa do vídeo`}
             />
             <video
               ref={videoRef}
               className={`gallery-video ${isVideoPlaying ? "is-playing" : ""}`}
               src={currentMedia.src}
-              poster={getImagePosterUrl(videoPosterUrl, images[0])}
+              poster={videoPoster}
               loop
               muted
               playsInline
@@ -196,7 +197,7 @@ export default function ProductGallery({ product }) {
             >
               {item.type === "video" ? (
                 <img
-                  src={getImagePosterUrl(videoPosterUrl, images[0])}
+                  src={videoPoster}
                   alt={`${product.name} - vídeo`}
                 />
               ) : (
