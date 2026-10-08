@@ -1471,6 +1471,14 @@ main {
   pointer-events: auto;
 }
 
+.product-gallery.lightbox-open.gallery-ui-hidden .gallery-arrow,
+.product-gallery.lightbox-open.gallery-ui-hidden .gallery-lightbox-close,
+.product-gallery.lightbox-open.gallery-ui-hidden .favorite-button,
+.product-gallery.lightbox-open.gallery-ui-hidden .share-button,
+.product-gallery.lightbox-open.gallery-ui-hidden .gallery-video-play {
+  display: none;
+}
+
 .gallery-lightbox-close {
   position: absolute;
   top: max(16px, env(safe-area-inset-top));
@@ -1485,6 +1493,12 @@ main {
   background: rgba(20, 20, 22, 0.78);
   color: #ffffff;
   cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  .product-gallery-placeholder .gallery-arrow {
+    display: none;
+  }
 }
 
 .gallery-lightbox-close svg {

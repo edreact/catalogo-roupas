@@ -50,6 +50,7 @@ export default function ProductGallery({ product }) {
   const [showVideoPlayButton, setShowVideoPlayButton] = useState(false);
   const [hasLeftVideo, setHasLeftVideo] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [showGalleryUI, setShowGalleryUI] = useState(true);
   const videoRef = useRef(null);
   const lightboxVideoRef = useRef(null);
   const videoCurrentTime = useRef(0);
@@ -77,6 +78,7 @@ export default function ProductGallery({ product }) {
       setIsVideoPlaying(resumeVideoInLightbox.current);
     }
 
+    setShowGalleryUI(true);
     setIsLightboxOpen(false);
   }, [currentMedia?.type]);
 
@@ -249,8 +251,15 @@ export default function ProductGallery({ product }) {
       setIsVideoPlaying(resumeVideoInLightbox.current);
     }
 
+    setShowGalleryUI(true);
     setIsLightboxOpen(true);
   }
+
+  const hideLightboxUI =
+    isLightboxOpen &&
+    currentMedia?.type === "video" &&
+    isVideoPlaying &&
+    !showGalleryUI;
 
   return (
     <div
@@ -260,7 +269,7 @@ export default function ProductGallery({ product }) {
               resumeVideoInLightbox.current ? "video-resuming" : ""
             }`
           : ""
-      }`}
+      } ${hideLightboxUI ? "gallery-ui-hidden" : ""}`}
     >
       <div
         className={`product-gallery-placeholder product-art-${product.imageTone}`}
@@ -270,6 +279,16 @@ export default function ProductGallery({ product }) {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        onClick={(event) => {
+          if (
+            isLightboxOpen &&
+            currentMedia?.type === "video" &&
+            isVideoPlaying &&
+            !event.target.closest("button")
+          ) {
+            setShowGalleryUI((visible) => !visible);
+          }
+        }}
       >
         {isLightboxOpen && (
           <button
