@@ -44,7 +44,6 @@ export default function ProductGallery({ product }) {
   })();
 
   const [current, setCurrent] = useState(initialImage);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [hasVideoStarted, setHasVideoStarted] = useState(false);
   const [hasVideoEnded, setHasVideoEnded] = useState(false);
   const [showVideoPlayButton, setShowVideoPlayButton] = useState(false);
@@ -52,9 +51,7 @@ export default function ProductGallery({ product }) {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [showGalleryUI, setShowGalleryUI] = useState(true);
   const videoRef = useRef(null);
-  const lightboxVideoRef = useRef(null);
   const videoCurrentTime = useRef(0);
-  const resumeVideoInLightbox = useRef(false);
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
 
@@ -62,78 +59,33 @@ export default function ProductGallery({ product }) {
   const currentMedia = media[current];
 
   const closeLightbox = useCallback(() => {
-    if (currentMedia?.type === "video" && lightboxVideoRef.current) {
-      const lightboxVideo = lightboxVideoRef.current;
-      videoCurrentTime.current = lightboxVideo.currentTime;
-      resumeVideoInLightbox.current =
-        !lightboxVideo.paused && !lightboxVideo.ended;
-
-      if (videoRef.current) {
-        videoRef.current.currentTime = videoCurrentTime.current;
-        if (resumeVideoInLightbox.current) {
-          videoRef.current.play().catch(() => setIsVideoPlaying(false));
-        }
-      }
-
-      setIsVideoPlaying(resumeVideoInLightbox.current);
+    if (videoRef.current) {
+      videoCurrentTime.current = videoRef.current.currentTime;
     }
 
     setShowGalleryUI(true);
     setIsLightboxOpen(false);
-  }, [currentMedia?.type]);
+  }, []);
 
   useEffect(() => {
-    setIsVideoPlaying(false);
     setShowVideoPlayButton(false);
   }, [current]);
 
   useEffect(() => {
-    if (currentMedia?.type !== "video" || !videoRef.current || hasLeftVideo) {
+    if (currentMedia?.type !== "video" || !videoRef.current) {
+      return;
+    }
+
+    if (hasLeftVideo) {
+      setShowVideoPlayButton(true);
       return;
     }
 
     videoRef.current.muted = true;
-    videoRef.current.play().catch(() => setIsVideoPlaying(false));
-  }, [currentMedia?.src, currentMedia?.type, hasLeftVideo]);
-
-  useEffect(() => {
-    if (currentMedia?.type !== "video" || isVideoPlaying || isLightboxOpen) {
-      return undefined;
-    }
-
-    const timer = window.setTimeout(() => {
+    videoRef.current.play().catch(() => {
       setShowVideoPlayButton(true);
-    }, 1000);
-
-    return () => window.clearTimeout(timer);
-  }, [currentMedia?.type, isVideoPlaying, isLightboxOpen]);
-
-  useEffect(() => {
-    const lightboxVideo = lightboxVideoRef.current;
-
-    if (!isLightboxOpen || currentMedia?.type !== "video" || !lightboxVideo) {
-      return undefined;
-    }
-
-    function startLightboxVideo() {
-      lightboxVideo.currentTime = videoCurrentTime.current;
-
-      if (resumeVideoInLightbox.current) {
-        lightboxVideo.play().catch(() => setIsVideoPlaying(false));
-      }
-    }
-
-    if (lightboxVideo.readyState >= HTMLMediaElement.HAVE_METADATA) {
-      startLightboxVideo();
-      return undefined;
-    }
-
-    lightboxVideo.addEventListener("loadedmetadata", startLightboxVideo, {
-      once: true,
     });
-    return () =>
-      lightboxVideo.removeEventListener("loadedmetadata", startLightboxVideo);
-  }, [isLightboxOpen, currentMedia?.src, currentMedia?.type]);
+  }, [currentMedia?.src, currentMedia?.type, hasLeftVideo]);
 
   useEffect(() => {
     if (!isLightboxOpen) {
@@ -196,18 +148,11 @@ export default function ProductGallery({ product }) {
 
   function changeSlide(index) {
     if (currentMedia?.type === "video" && index !== current) {
-      if (isLightboxOpen && lightboxVideoRef.current) {
-        const lightboxVideo = lightboxVideoRef.current;
-        videoCurrentTime.current = lightboxVideo.currentTime;
-        resumeVideoInLightbox.current =
-          !lightboxVideo.paused && !lightboxVideo.ended;
-        lightboxVideo.pause();
-      } else if (videoRef.current) {
+      if (videoRef.current) {
         videoCurrentTime.current = videoRef.current.currentTime;
         videoRef.current.pause();
       }
 
-      setIsVideoPlaying(false);
       setHasLeftVideo(true);
     }
 
@@ -215,25 +160,18 @@ export default function ProductGallery({ product }) {
   }
 
   function playVideo() {
-    const player = isLightboxOpen
-      ? lightboxVideoRef.current
-      : videoRef.current;
-
-    if (!player) {
+    if (!videoRef.current) {
       return;
     }
 
-    setShowVideoPlayButton(false);
-    setHasVideoEnded(false);
-    setIsVideoPlaying(true);
-    player.play().catch(() => setIsVideoPlaying(false));
+    videoRef.current.play().catch(() => {
+      setShowVideoPlayButton(true);
+    });
   }
 
   function handleVideoEnded(event) {
     event.currentTarget.currentTime = 0;
     videoCurrentTime.current = 0;
-    resumeVideoInLightbox.current = false;
-    setIsVideoPlaying(false);
     setHasVideoEnded(true);
     setShowVideoPlayButton(true);
   }
@@ -244,11 +182,7 @@ export default function ProductGallery({ product }) {
     }
 
     if (currentMedia?.type === "video" && videoRef.current) {
-      const video = videoRef.current;
-      videoCurrentTime.current = video.currentTime;
-      resumeVideoInLightbox.current = !video.paused && !video.ended;
-      setShowVideoPlayButton(false);
-      setIsVideoPlaying(resumeVideoInLightbox.current);
+      videoCurrentTime.current = videoRef.current.currentTime;
     }
 
     setShowGalleryUI(true);
@@ -258,18 +192,13 @@ export default function ProductGallery({ product }) {
   const hideLightboxUI =
     isLightboxOpen &&
     currentMedia?.type === "video" &&
-    isVideoPlaying &&
     !showGalleryUI;
 
   return (
     <div
-      className={`product-gallery ${isVideoPlaying ? "video-playing" : ""} ${
-        isLightboxOpen
-          ? `lightbox-open ${
-              resumeVideoInLightbox.current ? "video-resuming" : ""
-            }`
-          : ""
-      } ${hideLightboxUI ? "gallery-ui-hidden" : ""}`}
+      className={`product-gallery ${isLightboxOpen ? "lightbox-open" : ""} ${
+        hideLightboxUI ? "gallery-ui-hidden" : ""
+      }`}
     >
       <div
         className={`product-gallery-placeholder product-art-${product.imageTone}`}
@@ -283,7 +212,6 @@ export default function ProductGallery({ product }) {
           if (
             isLightboxOpen &&
             currentMedia?.type === "video" &&
-            isVideoPlaying &&
             !event.target.closest("button")
           ) {
             setShowGalleryUI((visible) => !visible);
@@ -313,27 +241,29 @@ export default function ProductGallery({ product }) {
 
         {currentMedia.type === "video" ? (
           <>
-            <img
-              className="gallery-video-poster"
-              src={videoPoster}
-              alt={`${product.name} - capa do vídeo`}
-              onClick={openLightbox}
-            />
             <div className="gallery-video-container">
+              {(!hasVideoStarted || hasVideoEnded) && (
+                <img
+                  className="gallery-video-poster"
+                  src={videoPoster}
+                  alt={`${product.name} - capa do vídeo`}
+                />
+              )}
               <video
                 ref={videoRef}
                 className={`gallery-video ${
-                  isVideoPlaying ? "is-playing" : ""
-                } ${hasVideoStarted ? "video-has-started" : ""} ${
-                  hasVideoEnded ? "video-ended" : ""
+                  hasVideoEnded
+                    ? "video-ended"
+                    : hasVideoStarted
+                      ? "video-has-started"
+                      : ""
                 }`}
                 src={currentMedia.src}
-                poster={videoPoster}
                 autoPlay={!hasLeftVideo}
                 muted
                 playsInline
                 preload="none"
-                controls={isLightboxOpen || isVideoPlaying}
+                controls={isLightboxOpen}
                 controlsList="nodownload"
                 aria-label={`Vídeo de introdução de ${product.name}`}
                 onLoadedMetadata={() => {
@@ -344,17 +274,11 @@ export default function ProductGallery({ product }) {
                 onPlay={() => {
                   setHasVideoStarted(true);
                   setHasVideoEnded(false);
-                  setIsVideoPlaying(true);
                   setShowVideoPlayButton(false);
                 }}
                 onEnded={handleVideoEnded}
-                onPause={() => {
-                  if (videoRef.current) {
-                    videoCurrentTime.current = videoRef.current.currentTime;
-                  }
-                  if (!isLightboxOpen) {
-                    setIsVideoPlaying(false);
-                  }
+                onPause={(event) => {
+                  videoCurrentTime.current = event.currentTarget.currentTime;
                 }}
               />
               {!isLightboxOpen && !showVideoPlayButton && !hasVideoEnded && (
@@ -373,36 +297,6 @@ export default function ProductGallery({ product }) {
                 />
               )}
             </div>
-            {isLightboxOpen && (
-              <video
-                ref={lightboxVideoRef}
-                className={`gallery-video gallery-lightbox-video ${
-                  hasVideoStarted ? "video-has-started" : ""
-                } ${hasVideoEnded ? "video-ended" : ""}`}
-                src={currentMedia.src}
-                poster={videoPoster}
-                muted
-                playsInline
-                preload="auto"
-                controls
-                controlsList="nodownload"
-                aria-label={`Vídeo de introdução de ${product.name}`}
-                onTimeUpdate={(event) => {
-                  videoCurrentTime.current = event.currentTarget.currentTime;
-                }}
-                onPlay={() => {
-                  setHasVideoStarted(true);
-                  setHasVideoEnded(false);
-                  setIsVideoPlaying(true);
-                }}
-                onEnded={handleVideoEnded}
-                onPause={() => {
-                  videoCurrentTime.current =
-                    lightboxVideoRef.current?.currentTime ?? videoCurrentTime.current;
-                  setIsVideoPlaying(false);
-                }}
-              />
-            )}
             {showVideoPlayButton && (
               <button
                 className="gallery-video-play"
