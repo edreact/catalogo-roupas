@@ -1250,6 +1250,11 @@ main {
   pointer-events: auto;
 }
 
+.gallery-video.video-has-started:not(.video-ended) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .gallery-video-play {
   position: absolute;
   top: 50%;
@@ -1413,6 +1418,11 @@ main {
   z-index: 3;
   opacity: 1;
   pointer-events: auto;
+}
+
+.product-gallery.lightbox-open .gallery-lightbox-video.video-ended {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .product-gallery .gallery-video.video-ended,

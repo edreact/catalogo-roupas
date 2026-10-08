@@ -45,6 +45,7 @@ export default function ProductGallery({ product }) {
 
   const [current, setCurrent] = useState(initialImage);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [hasVideoStarted, setHasVideoStarted] = useState(false);
   const [hasVideoEnded, setHasVideoEnded] = useState(false);
   const [showVideoPlayButton, setShowVideoPlayButton] = useState(false);
   const [hasLeftVideo, setHasLeftVideo] = useState(false);
@@ -301,7 +302,9 @@ export default function ProductGallery({ product }) {
             />
             <video
               ref={videoRef}
-              className={`gallery-video ${isVideoPlaying ? "is-playing" : ""} ${
+              className={`gallery-video ${
+                isVideoPlaying ? "is-playing" : ""
+              } ${hasVideoStarted ? "video-has-started" : ""} ${
                 hasVideoEnded ? "video-ended" : ""
               }`}
               src={currentMedia.src}
@@ -320,6 +323,7 @@ export default function ProductGallery({ product }) {
                 }
               }}
               onPlay={() => {
+                setHasVideoStarted(true);
                 setHasVideoEnded(false);
                 setIsVideoPlaying(true);
                 setShowVideoPlayButton(false);
@@ -338,8 +342,8 @@ export default function ProductGallery({ product }) {
               <video
                 ref={lightboxVideoRef}
                 className={`gallery-video gallery-lightbox-video ${
-                  hasVideoEnded ? "video-ended" : ""
-                }`}
+                  hasVideoStarted ? "video-has-started" : ""
+                } ${hasVideoEnded ? "video-ended" : ""}`}
                 src={currentMedia.src}
                 poster={videoPoster}
                 muted
@@ -352,6 +356,7 @@ export default function ProductGallery({ product }) {
                   videoCurrentTime.current = event.currentTarget.currentTime;
                 }}
                 onPlay={() => {
+                  setHasVideoStarted(true);
                   setHasVideoEnded(false);
                   setIsVideoPlaying(true);
                 }}
