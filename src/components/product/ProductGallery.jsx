@@ -300,44 +300,60 @@ export default function ProductGallery({ product }) {
               alt={`${product.name} - capa do vídeo`}
               onClick={openLightbox}
             />
-            <video
-              ref={videoRef}
-              className={`gallery-video ${
-                isVideoPlaying ? "is-playing" : ""
-              } ${hasVideoStarted ? "video-has-started" : ""} ${
-                hasVideoEnded ? "video-ended" : ""
-              }`}
-              src={currentMedia.src}
-              poster={videoPoster}
-              autoPlay={!hasLeftVideo}
-              muted
-              playsInline
-              preload="none"
-              controls={isLightboxOpen || isVideoPlaying}
-              controlsList="nodownload"
-              aria-label={`Vídeo de introdução de ${product.name}`}
-              onClick={openLightbox}
-              onLoadedMetadata={() => {
-                if (videoRef.current) {
-                  videoRef.current.currentTime = videoCurrentTime.current || 0;
-                }
-              }}
-              onPlay={() => {
-                setHasVideoStarted(true);
-                setHasVideoEnded(false);
-                setIsVideoPlaying(true);
-                setShowVideoPlayButton(false);
-              }}
-              onEnded={handleVideoEnded}
-              onPause={() => {
-                if (videoRef.current) {
-                  videoCurrentTime.current = videoRef.current.currentTime;
-                }
-                if (!isLightboxOpen) {
-                  setIsVideoPlaying(false);
-                }
-              }}
-            />
+            <div className="gallery-video-container">
+              <video
+                ref={videoRef}
+                className={`gallery-video ${
+                  isVideoPlaying ? "is-playing" : ""
+                } ${hasVideoStarted ? "video-has-started" : ""} ${
+                  hasVideoEnded ? "video-ended" : ""
+                }`}
+                src={currentMedia.src}
+                poster={videoPoster}
+                autoPlay={!hasLeftVideo}
+                muted
+                playsInline
+                preload="none"
+                controls={isLightboxOpen || isVideoPlaying}
+                controlsList="nodownload"
+                aria-label={`Vídeo de introdução de ${product.name}`}
+                onLoadedMetadata={() => {
+                  if (videoRef.current) {
+                    videoRef.current.currentTime = videoCurrentTime.current || 0;
+                  }
+                }}
+                onPlay={() => {
+                  setHasVideoStarted(true);
+                  setHasVideoEnded(false);
+                  setIsVideoPlaying(true);
+                  setShowVideoPlayButton(false);
+                }}
+                onEnded={handleVideoEnded}
+                onPause={() => {
+                  if (videoRef.current) {
+                    videoCurrentTime.current = videoRef.current.currentTime;
+                  }
+                  if (!isLightboxOpen) {
+                    setIsVideoPlaying(false);
+                  }
+                }}
+              />
+              {!isLightboxOpen && !showVideoPlayButton && !hasVideoEnded && (
+                <div
+                  className="video-overlay-trigger"
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Ampliar vídeo"
+                  onClick={openLightbox}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      openLightbox();
+                    }
+                  }}
+                />
+              )}
+            </div>
             {isLightboxOpen && (
               <video
                 ref={lightboxVideoRef}

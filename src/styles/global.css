@@ -1237,6 +1237,11 @@ main {
   background: #000000;
 }
 
+.gallery-video-container {
+  position: absolute;
+  inset: 0;
+}
+
 .gallery-video {
   position: absolute;
   inset: 0;
@@ -1255,22 +1260,40 @@ main {
   pointer-events: auto;
 }
 
+.video-overlay-trigger {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
 .gallery-video-play {
   position: absolute;
   top: 50%;
   left: 50%;
-  z-index: 3;
-  width: 96px;
-  height: 96px;
-  border: 0;
+  z-index: 11;
+  width: 64px;
+  height: 64px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
   border-radius: 50%;
-  background: rgba(17, 17, 17, 0.92);
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
   color: #ffffff;
   display: grid;
   place-items: center;
   transform: translate(-50%, -50%);
-  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.42);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
   cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.gallery-video-play:hover {
+  background: rgba(255, 255, 255, 0.42);
+  transform: translate(-50%, -50%) scale(1.05);
 }
 
 .gallery-video-play:focus-visible {
@@ -1279,11 +1302,11 @@ main {
 }
 
 .gallery-video-play svg {
-  width: 48px;
-  height: 48px;
+  width: 30px;
+  height: 30px;
   fill: currentColor;
-  stroke: currentColor;
-  stroke-width: 1.5;
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 0.8;
   stroke-linejoin: round;
 }
 
