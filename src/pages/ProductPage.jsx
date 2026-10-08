@@ -63,7 +63,7 @@ export default function ProductPage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Comprar pelo WhatsApp
+              Ver no WhatsApp!
             </a>
           )}
 
