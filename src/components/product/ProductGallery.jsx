@@ -153,6 +153,7 @@ export default function ProductGallery({ product }) {
         videoRef.current.pause();
       }
 
+      setHasVideoStarted(false);
       setHasLeftVideo(true);
     }
 
