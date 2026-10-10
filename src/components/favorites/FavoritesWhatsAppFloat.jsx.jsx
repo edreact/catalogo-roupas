@@ -7,8 +7,13 @@ export default function FavoritesWhatsAppFloat() {
   const { favorites } = useFavorites();
   const { products } = useCatalog();
 
-  const favoriteProducts =
-    products?.filter((p) => favorites?.includes(p.code)) || [];
+  const favoriteProducts = favorites.flatMap((favorite) => {
+    const product = products.find(
+      (item) => String(item.code) === favorite.code,
+    );
+
+    return product ? [{ ...product, img: favorite.img }] : [];
+  });
 
   if (favoriteProducts.length === 0) return null;
 
