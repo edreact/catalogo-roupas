@@ -6,12 +6,16 @@ import { gerarLinkWhatsAppFavoritos } from "../utils/whatsapp.js";
 import { FaWhatsapp } from "react-icons/fa";
 
 export default function FavoritesPage() {
-  const { favorites } = useFavorites(); // ["VF-1001"]
-  const products = listaProdutos.products || []; // [{code: "VF-1001", ...}]
+  const { favorites } = useFavorites();
+  const products = listaProdutos.products || [];
 
-  // CORREÇÃO AQUI: Mudamos de product.id para product.code
-  const favoriteProducts =
-    products?.filter((product) => favorites?.includes(product.code)) || [];
+  const favoriteProducts = favorites.flatMap((favorite) => {
+    const product = products.find(
+      (item) => String(item.code) === favorite.code,
+    );
+
+    return product ? [{ ...product, img: favorite.img, favoriteImg: favorite.img }] : [];
+  });
 
   if (favoriteProducts.length === 0) {
     return (
@@ -35,8 +39,7 @@ export default function FavoritesPage() {
 
       <div className="product-grid">
         {favoriteProducts.map((product) => (
-          // Usando o code como key por garantia
-          <ProductCard key={product.code} product={product} />
+          <ProductCard key={`${product.code}-${product.img}`} product={product} />
         ))}
       </div>
       {/* NOVO BLOCO: Botão para enviar toda a lista via WhatsApp */}

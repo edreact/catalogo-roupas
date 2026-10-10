@@ -19,7 +19,15 @@ export function gerarLinkWhatsAppFavoritos(productsList) {
   const telefone = import.meta.env.VITE_WHATSAPP_NUMBER;
 
   const listaProdutos = productsList
-    .map((prod) => `• ${prod.code} - ${prod.name}`)
+    .map((prod) => {
+      const url = new URL(
+        `/produto/${encodeURIComponent(prod.slug || prod.code)}`,
+        window.location.origin,
+      );
+      url.searchParams.set("img", prod.img || 1);
+
+      return `• ${prod.name} - Código: ${prod.code}\n  ${url.toString()}`;
+    })
     .join("\n");
 
   const mensagem = `Olá!

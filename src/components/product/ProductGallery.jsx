@@ -230,7 +230,7 @@ export default function ProductGallery({ product }) {
           </button>
         )}
 
-        <FavoriteButton product={product} />
+        <FavoriteButton product={product} img={current + 1} />
 
         <button
           className="share-button"

@@ -2,15 +2,15 @@ import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import { useFavorites } from "../../context/FavoritesContext.jsx";
 
-export default function FavoriteButton({ product }) {
+export default function FavoriteButton({ product, img = 1 }) {
   const { toggleFavorite, isFavorite } = useFavorites();
 
-  const selected = isFavorite(product.code);
+  const selected = isFavorite(product.code, img);
 
   function handleClick(event) {
     event.preventDefault();
     event.stopPropagation();
-    toggleFavorite(product.code);
+    toggleFavorite(product.code, img);
   }
 
   return (

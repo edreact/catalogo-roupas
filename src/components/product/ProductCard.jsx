@@ -6,7 +6,13 @@ import { formatCurrency } from "../../utils/formatters.js";
 export default function ProductCard({ product }) {
   const hasSale = Boolean(product.salePrice);
   const isSold = product.status === "Vendido";
-  const image = product.images?.[0];
+  const selectedImageIndex = product.favoriteImg
+    ? product.favoriteImg - (product.videoUrl ? 2 : 1)
+    : 0;
+  const image = product.images?.[selectedImageIndex] || product.images?.[0];
+  const productPath = `/produto/${product.slug}${
+    product.favoriteImg ? `?img=${product.favoriteImg}` : ""
+  }`;
 
   return (
     <article
@@ -16,10 +22,10 @@ export default function ProductCard({ product }) {
     >
       <div className="product-image-wrapper">
 
-        <FavoriteButton product={product} />
+        <FavoriteButton product={product} img={product.favoriteImg ?? 1} />
 
         <Link
-          to={`/produto/${product.slug}`}
+          to={productPath}
           className="product-image-link"
         >
           <div className={`product-art product-art-${product.imageTone}`}>
@@ -51,7 +57,7 @@ export default function ProductCard({ product }) {
           </p>
 
           <h3>
-            <Link to={`/produto/${product.slug}`}>
+            <Link to={productPath}>
               {product.name}
             </Link>
           </h3>
@@ -76,7 +82,7 @@ export default function ProductCard({ product }) {
 
           <Link
             className="mini-action"
-            to={`/produto/${product.slug}`}
+            to={productPath}
           >
             Ver
           </Link>
