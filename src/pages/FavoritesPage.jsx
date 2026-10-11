@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 import listaProdutos from "../data/produtos.json";
 import { useFavorites } from "../context/FavoritesContext.jsx";
 import ProductCard from "../components/product/ProductCard.jsx";
-import { gerarLinkWhatsAppFavoritos } from "../utils/whatsapp.js";
-import { FaWhatsapp } from "react-icons/fa";
+import FavoritesWhatsAppFloat from "../components/favorites/FavoritesWhatsAppFloat.jsx";
 
 export default function FavoritesPage() {
   const { favorites } = useFavorites();
@@ -39,21 +38,14 @@ export default function FavoritesPage() {
 
       <div className="product-grid">
         {favoriteProducts.map((product) => (
-          <ProductCard key={`${product.code}-${product.img}`} product={product} />
+          <ProductCard
+            key={`${product.code}-${product.img}`}
+            product={product}
+            confirmFavoriteRemoval
+          />
         ))}
       </div>
-      {/* NOVO BLOCO: Botão para enviar toda a lista via WhatsApp */}
-      <div style={{ marginTop: "2rem", textAlign: "center" }}>
-        <a
-          className="button button-primary whatsapp-button"
-          href={gerarLinkWhatsAppFavoritos(favoriteProducts)}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FaWhatsapp className="whatsapp-button-icon" />
-          <span>Envie sua seleção pelo WhatsApp</span>
-        </a>
-      </div>
+      <FavoritesWhatsAppFloat />
     </main>
   );
 }

@@ -1654,6 +1654,9 @@ main {
   text-decoration: none;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   transition: 0.2s;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .whatsapp-float-button:hover {
@@ -1686,6 +1689,118 @@ main {
 
 .whatsapp-icon {
   font-size: 1.2rem;
+}
+
+.favorites-summary-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.58);
+}
+
+.favorites-summary-modal {
+  width: min(100%, 520px);
+  max-height: min(80vh, 680px);
+  overflow-y: auto;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.favorites-summary-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.favorites-summary-header .eyebrow {
+  margin: 0 0 6px;
+}
+
+.favorites-summary-header h2 {
+  margin: 0;
+}
+
+.favorites-summary-close {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1.25rem;
+}
+
+.favorites-summary-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.favorites-summary-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.favorites-summary-list li > div {
+  display: grid;
+  gap: 4px;
+}
+
+.summary-item-thumb {
+  width: 56px;
+  height: 68px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.favorites-summary-code {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.favorites-summary-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.favorites-summary-confirm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+@media (max-width: 480px) {
+  .favorites-summary-modal {
+    padding: 20px;
+  }
+
+  .favorites-summary-actions > * {
+    width: 100%;
+  }
 }
 
 /* Animation */

@@ -3,7 +3,7 @@ import ProductBadges from "./ProductBadges.jsx";
 import FavoriteButton from "../favorites/FavoriteButton.jsx";
 import { formatCurrency } from "../../utils/formatters.js";
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, confirmFavoriteRemoval = false }) {
   const hasSale = Boolean(product.salePrice);
   const isSold = product.status === "Vendido";
   const selectedImageIndex = product.favoriteImg
@@ -22,7 +22,11 @@ export default function ProductCard({ product }) {
     >
       <div className="product-image-wrapper">
 
-        <FavoriteButton product={product} img={product.favoriteImg ?? 1} />
+        <FavoriteButton
+          product={product}
+          img={product.favoriteImg ?? 1}
+          confirmRemoval={confirmFavoriteRemoval}
+        />
 
         <Link
           to={productPath}
