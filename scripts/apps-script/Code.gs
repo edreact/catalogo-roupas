@@ -120,6 +120,8 @@ function mapProduct(row) {
     quantity,
     images,
     video: String(row.Video || '').trim(),
+    videoDestaque: toBoolean(row.VideoDestaque),
+    videoUrl: String(row.VideoUrl || '').trim(),
     status,
     isAvailable: normalizeText(status) === 'disponivel' && quantity !== 0,
     createdAt: formatDate(row.DataCadastro),

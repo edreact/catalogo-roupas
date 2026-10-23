@@ -816,6 +816,7 @@ main {
 }
 
 .product-art img,
+.product-art video,
 .product-gallery-placeholder img,
 .product-gallery-placeholder video {
   position: absolute;
@@ -828,6 +829,8 @@ main {
 
 .product-art:has(img)::before,
 .product-art:has(img)::after,
+.product-art:has(video)::before,
+.product-art:has(video)::after,
 .product-gallery-placeholder:has(img):not(:has(video))::before,
 .product-gallery-placeholder:has(img):not(:has(video))::after,
 .product-gallery-placeholder:has(video)::before,

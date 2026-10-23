@@ -244,6 +244,11 @@ function normalizeProduct(product, index = 0) {
         Boolean,
       ),
     videoUrl: product.videoUrl || product.VideoUrl || "",
+    videoDestaque:
+      product.VideoDestaque === true ||
+      String(product.VideoDestaque ?? product.videoDestaque ?? "")
+        .trim()
+        .toUpperCase() === "TRUE",
     videoPosterUrl: product.videoPosterUrl || product.VideoPosterUrl || "",
     active:
       product.Ativo === true ||

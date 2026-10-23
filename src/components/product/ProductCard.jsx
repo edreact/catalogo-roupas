@@ -6,6 +6,10 @@ import { formatCurrency } from "../../utils/formatters.js";
 export default function ProductCard({ product, confirmFavoriteRemoval = false }) {
   const hasSale = Boolean(product.salePrice);
   const isSold = product.status === "Vendido";
+  const temVideoDestaque =
+    (product.videoDestaque === true || product.videoDestaque === "TRUE") &&
+    typeof product.videoUrl === "string" &&
+    product.videoUrl.trim() !== "";
   const selectedImageIndex = product.favoriteImg
     ? product.favoriteImg - (product.videoUrl ? 2 : 1)
     : 0;
@@ -33,12 +37,25 @@ export default function ProductCard({ product, confirmFavoriteRemoval = false })
           className="product-image-link"
         >
           <div className={`product-art product-art-${product.imageTone}`}>
-            {image && (
-              <img
-                src={image}
-                alt={product.name}
-                loading="lazy"
+            {temVideoDestaque ? (
+              <video
+                src={product.videoUrl}
+                poster={product.videoPosterUrl || image}
+                aria-label={`Vídeo de destaque: ${product.name}`}
+                muted
+                playsInline
+                autoPlay
+                loop
+                preload="metadata"
               />
+            ) : (
+              image && (
+                <img
+                  src={image}
+                  alt={product.name}
+                  loading="lazy"
+                />
+              )
             )}
 
             <ProductBadges badges={product.badges} />
